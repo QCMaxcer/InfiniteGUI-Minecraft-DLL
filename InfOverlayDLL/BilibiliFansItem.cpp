@@ -74,5 +74,6 @@ void BilibiliFansItem::Load(const nlohmann::json& j)
 void BilibiliFansItem::Save(nlohmann::json& j) const
 {
     j["type"] = "bilibili_fans";
+    j["uid"] = uid;
     SaveInfoItemConfig(j);
 }

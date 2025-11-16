@@ -284,27 +284,17 @@ BOOL WINAPI MySwapBuffers(HDC hdc)
     ImGui_ImplWin32_NewFrame();
     ImGui::NewFrame();
 
-    // --------------- 你的 ImGui 渲染内容放这里 ---------------
-    // 注意：当 g_uiActive == false 时依然可以绘制 HUD（但鼠标不可用）
-    // 你可以依据 g_uiActive 决定渲染哪些交互元素
     {
 
-        // 1) 先调度数据更新（Update）
-
-
-        // 2) 渲染 HUD（始终显示的小 UI）
-//    这里你可以按需画不交互的 overlay（例如粉丝数、文件数）
-        infoManager.RenderAll(&globalConfig, g_hwnd);  // 这里每个 item 都做 ImGui::Begin/End
+        infoManager.RenderAll(&globalConfig, g_hwnd); 
 
         // 如果 UI 激活，弹出交互主界面
         if (g_uiActive)
         {
-        // draw main UI (settings, add/remove, config save)
-        mainUI.Render(&globalConfig);   // 你需要把 MainUI 的 Render 改成纯 ImGui 渲染（不依赖 HWND）
+        mainUI.Render(&globalConfig); 
 
         }
     }
-    // ------------------------------------------------------------
 
     // 渲染 ImGui
     ImGui::Render();
