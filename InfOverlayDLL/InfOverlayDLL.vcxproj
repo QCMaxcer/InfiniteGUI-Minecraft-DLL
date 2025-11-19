@@ -138,6 +138,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="App.h" />
     <ClInclude Include="AudioManager.h" />
     <ClInclude Include="BilibiliFansItem.h" />
     <ClInclude Include="ConfigManager.h" />
@@ -174,6 +175,7 @@
     <ClInclude Include="WindowSnapper.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="App.cpp" />
     <ClCompile Include="AudioManager.cpp" />
     <ClCompile Include="BilibiliFansItem.cpp" />
     <ClCompile Include="ConfigManager.cpp" />

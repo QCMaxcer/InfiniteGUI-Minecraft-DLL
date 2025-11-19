@@ -1,6 +1,7 @@
 #include "MainUI.h"
 #include "imgui/imgui.h"
 #include "ImGuiStd.h"
+#include "App.h"
 #include "ConfigManager.h"
 #include "GlobalConfig.h"
 #include "FileManager.h"
@@ -99,7 +100,7 @@ void MainUI::Render(GlobalConfig* globalConfig, bool* p_open)
 
     ImGui::Begin(u8"主控制面板", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoTitleBar);
 
-    ImGui::Text(u8"主控制面板");
+    ImGui::Text(u8"-->主控制面板");
 
     ImGui::SameLine();
 
@@ -134,6 +135,13 @@ void MainUI::Render(GlobalConfig* globalConfig, bool* p_open)
 
     ImGui::Separator();
 
+    //显示公告
+    ImGui::BeginChild("Announce", ImVec2(0, 100), true);
+    ImGuiStd::TextShadow(App::Instance().announcement.c_str());
+    ImGui::EndChild();
+
+
+    ImGui::Separator();
     if (ImGui::CollapsingHeader(u8"全局设置", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_FramePadding))
     {
         if (ImGui::SliderFloat(u8"圆角半径", &globalConfig->roundCornerRadius, 0.0f, 10.0f, "%.1f"))
@@ -193,6 +201,67 @@ void MainUI::Render(GlobalConfig* globalConfig, bool* p_open)
     ImGui::Separator();
     DrawItemList();
 
+    ImGui::Separator();
+    //显示关于
+    if (ImGui::CollapsingHeader(u8"关于", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_FramePadding))
+    {
+        ImGuiStd::TextShadow(u8"无限小窗InfOverlay");
+        ImGui::SameLine();
+        std::string appVersion = std::to_string(App::Instance().appVersion.major) + "." + std::to_string(App::Instance().appVersion.minor) + "." + std::to_string(App::Instance().appVersion.build);
+        ImGuiStd::TextShadow(("v" + appVersion).c_str());
+        ImGui::SameLine();
+        if (ImGui::Button(u8"检查更新"))
+        {
+            if (!App::Instance().CheckUpdate())
+            {
+                ImGui::OpenPopup(u8"发现新版本");
+            }
+            else
+            {
+                ImGui::OpenPopup(u8"目前已是最新版本");
+            }
+        }
+        if (ImGui::BeginPopup(u8"发现新版本"))
+        {
+            ImGuiStd::TextShadow(u8"发现新版本！");
+            std::string cloudVersion = std::to_string(App::Instance().cloudVersion.major) + "." + std::to_string(App::Instance().cloudVersion.minor) + "." + std::to_string(App::Instance().cloudVersion.build);
+            ImGuiStd::TextShadow((u8"最新版本：" + cloudVersion).c_str());
+            if (ImGui::Button(u8"确定"))
+            {
+                ImGui::CloseCurrentPopup();
+            }
+            ImGui::EndPopup();
+        }
+        if (ImGui::BeginPopup(u8"目前已是最新版本"))
+        {
+            ImGuiStd::TextShadow(u8"目前已是最新版本");
+            if (ImGui::Button(u8"确定"))
+            {
+                ImGui::CloseCurrentPopup();
+            }
+            ImGui::EndPopup();
+        }
+        ImGuiStd::TextShadow((u8"作者：" + App::Instance().appAuthor).c_str());
+        ImGui::SameLine();
+        if (ImGui::Button(u8"Bilibili"))
+        {
+            ShellExecute(NULL, NULL, L"https://space.bilibili.com/399194206", NULL, NULL, SW_SHOWNORMAL);
+        }
+        ImGuiStd::TextShadow(u8"相关链接：");
+        ImGui::SameLine();
+        if (ImGui::Button(u8"爱发电"))
+        {
+            ShellExecute(NULL, NULL, L"https://ifdian.net/a/qc_max", NULL, NULL, SW_SHOWNORMAL);
+        }
+        ImGui::SameLine();
+        ImGuiStd::TextShadow(u8" & ");
+
+        ImGui::SameLine();
+        if (ImGui::Button(u8"GitHub"))
+        {
+            ShellExecute(NULL, NULL, L"https://github.com/QCMaxcer/InfOverlay-DLL", NULL, NULL, SW_SHOWNORMAL);
+        }
+    }
     ImGui::End();
 }
 

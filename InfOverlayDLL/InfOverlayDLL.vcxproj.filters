@@ -49,6 +49,9 @@
     <Filter Include="miniaudio">
       <UniqueIdentifier>{f00d2bf3-5f1e-420f-bc0d-57d62e1951aa}</UniqueIdentifier>
     </Filter>
+    <Filter Include="源文件\App">
+      <UniqueIdentifier>{f414afce-aa5f-4d73-b2d5-4d3e097231c3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="minHook\MinHook.h">
@@ -153,6 +156,9 @@
     <ClInclude Include="miniaudio\miniaudio.h">
       <Filter>miniaudio</Filter>
     </ClInclude>
+    <ClInclude Include="App.h">
+      <Filter>源文件\App</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -229,6 +235,9 @@
     </ClCompile>
     <ClCompile Include="AudioManager.cpp">
       <Filter>源文件\AudioEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="App.cpp">
+      <Filter>源文件\App</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

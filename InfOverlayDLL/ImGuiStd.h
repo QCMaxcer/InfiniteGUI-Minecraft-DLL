@@ -91,24 +91,6 @@ namespace ImGuiStd {
         if (element.binding)
         {
             ImGui::OpenPopup(text);
-            //¼àÌı¼üÅÌÊÂ¼ş
-            for (int i = 0; i < IM_ARRAYSIZE(keys); i++)
-            {
-                std::string keyStr = keys[i];
-                if (keyStr[0] == '-' || keyStr.compare("Mouse 1") == 0 || keyStr.compare("Mouse 2") == 0)
-                {
-                    continue;
-                }
-                if (GetAsyncKeyState(i) & 0x8000)
-                {
-                    key = i;
-                    hotkeyStr = keyStr;
-                    element.binding = false;
-                    ImGui::CloseCurrentPopup();
-                    break;
-                }
-            }
-
         }
         if (ImGui::BeginPopup(text))
         {
@@ -131,6 +113,19 @@ namespace ImGuiStd {
 
                 if (ImGui::IsMouseClicked(1))
                 {
+                    element.binding = false;
+                    ImGui::CloseCurrentPopup();
+                    break;
+                }
+
+                if (i == VK_LBUTTON || i == VK_RBUTTON || i == VK_MBUTTON || i == 0)
+                {
+                    continue;
+                }
+                if (GetAsyncKeyState(i) & 0x8000)
+                {
+                    key = i;
+                    hotkeyStr = keyStr;
                     element.binding = false;
                     ImGui::CloseCurrentPopup();
                     break;

@@ -9,6 +9,7 @@
 #include "StringConverter.h"
 #include "FileManager.h"
 #include "AudioManager.h"
+#include "App.h"
 #include "fonts\Uranus_Pixel_11Px.h"
 
 
@@ -207,6 +208,7 @@ void InitImGuiForContext(HWND hwnd)
     ConfigManager::Load(FileManager::GetConfigPath(), globalConfig, infoManager);
     //初始化音频管理器
     AudioManager::Instance().Init();
+    App::Instance().GetAnnouncement();
     StartUpdateThread();  // 启动更新线程
 }
 

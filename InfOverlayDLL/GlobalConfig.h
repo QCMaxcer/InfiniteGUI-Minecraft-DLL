@@ -5,7 +5,7 @@
 class GlobalConfig {
 public:
     float roundCornerRadius = 4.0f;  // 全局窗口圆角半径
-    int menuKey = VK_OEM_6;  // 全局菜单快捷键
+    int menuKey = VK_OEM_5;  // 全局菜单快捷键
     std::string fontPath = "default";  // 全局语言
 
     // 在这里加更多全局参数…
