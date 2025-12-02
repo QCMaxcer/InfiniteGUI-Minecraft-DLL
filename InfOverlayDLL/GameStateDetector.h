@@ -22,7 +22,7 @@ public:
         name = u8"ÓÎÏ·×´Ì¬¼ì²â";
         description = u8"¼ì²âÓÎÏ·µ±Ç°×´Ì¬";
         isEnabled = true;
-        refreshIntervalMs = 10;
+        updateIntervalMs = 10;
         lastUpdateTime = std::chrono::steady_clock::now();
     }
     ~GameStateDetector() {}
@@ -33,6 +33,7 @@ public:
         return instance;
     }
 
+    void Toggle() override;
     void Update() override;
     void Load(const nlohmann::json& j) override;
     void Save(nlohmann::json& j) const override;

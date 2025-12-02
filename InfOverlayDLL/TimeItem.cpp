@@ -3,6 +3,10 @@
 #include <sstream>
 #include "ImGuiStd.h"
 
+void TimeItem::Toggle()
+{
+}
+
 void TimeItem::Update()
 {
     // 获取系统当前时间
@@ -30,7 +34,7 @@ void TimeItem::DrawContent()
 
 void TimeItem::DrawSettings()
 {
-    DrawModuleSettings();
+    DrawItemSettings();
     ImGui::Text(u8"时钟 无额外设置");
     if (ImGui::CollapsingHeader(u8"通用设置"))
     {

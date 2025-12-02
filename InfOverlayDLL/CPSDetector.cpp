@@ -15,6 +15,9 @@ void CPSDetector::MarkUpCPSdated() {
     lastCpsTime = std::chrono::steady_clock::now();
 }
 
+void CPSDetector::Toggle()
+{
+}
 
 void CPSDetector::Update()
 {

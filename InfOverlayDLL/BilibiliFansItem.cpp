@@ -4,53 +4,60 @@
 #include "ImGui\imgui_internal.h"
 #include <nlohmann/json.hpp>
 #include "AudioManager.h"
+#include "HttpUpdateWorker.h"
+
+
+void BilibiliFansItem::Toggle()
+{
+    if (isEnabled)
+        HttpAddTask();
+    else
+        HttpRemoveTask();
+}
+
+void BilibiliFansItem::HttpAddTask()
+{
+    httpTaskId = HttpUpdateWorker::Instance().AddTask(
+        L"https://api.bilibili.com/x/relation/stat?vmid=" + std::to_wstring(uid),
+        httpUpdateIntervalMs,
+        [this](const std::string& response) {
+            try {
+                auto j = nlohmann::json::parse(response);
+                pendingFans = j["data"]["follower"].get<int>();
+            }
+            catch (...) {
+                pendingFans = -1;
+            }
+        }
+    );
+}
+
+void BilibiliFansItem::HttpRemoveTask()
+{
+    HttpUpdateWorker::Instance().RemoveTask(httpTaskId);
+}
 
 void BilibiliFansItem::Update()
 {
-    if (uid <= 0) {
-        fansCount = -1;
+    int newFans = pendingFans.load(); 
+
+    if (newFans < 0)
         return;
-    }
 
-    // 生成 URL（注意使用 wstring 版）
-    std::wstring url =
-        L"https://api.bilibili.com/x/relation/stat?vmid=" +
-        std::to_wstring(uid);
+    fansCount = newFans;
 
-    std::string response;
-    bool ok = HttpClient::HttpGet(url, response);
-
-    int resultFans = -1;
-
-    if (ok)
-    {
-        try {
-            auto j = nlohmann::json::parse(response);
-            resultFans = j["data"]["follower"].get<int>();
-        }
-        catch (...) {
-            resultFans = -1;
-        }
-    }
-
-    fansCount = resultFans;
-
-    if (fansCount < 0) {
-        ImGuiStd::TextShadow(u8"粉丝数获取失败");
-        return;
-    }
     if (fansCount > lastFansCount)
     {
         color.color = ImVec4(0.1f, 1.0f, 0.1f, 1.0f); //绿色
-        lastFansCount = fansCount;
         if (isPlaySound) AudioManager::Instance().playSound("bilibilifans\\bilibilifans_up.wav", soundVolume);
     }
     else if (fansCount < lastFansCount)
     {
         color.color = ImVec4(1.0f, 0.1f, 0.1f, 1.0f); //红色
-        lastFansCount = fansCount;
         if (isPlaySound) AudioManager::Instance().playSound("bilibilifans\\bilibilifans_down.wav", soundVolume);
     }
+
+    lastFansCount = fansCount;
 
 }
 
@@ -70,7 +77,7 @@ void BilibiliFansItem::DrawContent()
 
 void BilibiliFansItem::DrawSettings()
 {
-    DrawModuleSettings();
+    DrawItemSettings();
     static std::string uidStr = std::to_string(uid);
     ImGuiStd::InputTextStd(u8"B站 UID", uidStr);
     ImGui::SameLine();
@@ -84,8 +91,15 @@ void BilibiliFansItem::DrawSettings()
         {
             uidStr = u8"只能输入数字"; // 输入非数字
         }
+        else if (std::stoll(uidStr) <= 0)  //数字小于等于0
+        {
+            uidStr = u8"只能输入正整数"; // 输入负数
+        }
         else
+        {
             uid = std::stoll(uidStr);
+            HttpResetTask();
+        }
     }
     if (ImGui::CollapsingHeader(u8"通用设置"))
     {
@@ -104,7 +118,7 @@ void BilibiliFansItem::Load(const nlohmann::json& j)
     if (j.contains("uid")) uid = j["uid"];
     if (j.contains("fansCount")) fansCount = j["fansCount"];
     lastFansCount = fansCount;
-
+    if(isEnabled) HttpAddTask();
 }
 
 void BilibiliFansItem::Save(nlohmann::json& j) const

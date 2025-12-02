@@ -60,7 +60,7 @@ public:
         name = u8"CPS¼ì²â";
         description = u8"¼ì²â×óÓÒ¼üCPS";
         isEnabled = true;
-        refreshIntervalMs = 2;
+        updateIntervalMs = 2;
         lastUpdateTime = std::chrono::steady_clock::now();
         lastCpsTime = std::chrono::steady_clock::now();
     }
@@ -71,6 +71,7 @@ public:
         return instance;
     }
 
+    void Toggle() override;
     void Update() override;
     void Load(const nlohmann::json& j) override;
     void Save(nlohmann::json& j) const override;

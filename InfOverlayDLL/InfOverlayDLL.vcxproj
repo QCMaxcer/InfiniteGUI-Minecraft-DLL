@@ -231,6 +231,7 @@
     <ClInclude Include="gui.h" />
     <ClInclude Include="harmony_sc_regular.h" />
     <ClInclude Include="HttpClient.h" />
+    <ClInclude Include="HttpUpdateWorker.h" />
     <ClInclude Include="Images.h" />
     <ClInclude Include="ImGuiStd.h" />
     <ClInclude Include="ImGuiSty.h" />
@@ -281,6 +282,8 @@
     <ClCompile Include="GlobalConfig.cpp" />
     <ClCompile Include="gui.cpp" />
     <ClCompile Include="HttpClient.cpp" />
+    <ClCompile Include="HttpModule.h" />
+    <ClCompile Include="HttpUpdateWorker.cpp" />
     <ClCompile Include="Images.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />
     <ClCompile Include="imgui\imgui_demo.cpp" />

@@ -18,7 +18,7 @@ public:
         name = u8"时间显示";
         description = u8"显示当前时间";
         currentTimeStr = u8"正在获取系统时间...";
-        refreshIntervalMs = 1000;
+        updateIntervalMs = 1000;
         lastUpdateTime = std::chrono::steady_clock::now();
     }
     //Instance()
@@ -27,6 +27,7 @@ public:
         return instance;
     }
 
+    void Toggle() override;
     void Update() override;
     void DrawContent() override;
     void DrawSettings() override;

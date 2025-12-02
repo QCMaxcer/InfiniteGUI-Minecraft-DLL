@@ -1,6 +1,10 @@
 #include "TextItem.h"
 #include "ImGuiStd.h"
 
+void TextItem::Toggle()
+{
+}
+
 void TextItem::DrawContent()
 {
     ImGuiStd::TextShadow((prefix + text + suffix).c_str());
@@ -9,7 +13,7 @@ void TextItem::DrawContent()
 
 void TextItem::DrawSettings()
 {
-    DrawModuleSettings();
+    DrawItemSettings();
     ImGuiStd::InputTextStd(u8"文本内容", text);
     if (ImGui::CollapsingHeader(u8"通用设置"))
     {

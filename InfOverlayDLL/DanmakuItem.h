@@ -38,7 +38,7 @@ public:
         isEnabled = false;
         name = u8"B站弹幕显示";
         description = u8"显示B站直播间的弹幕(需配合B站弹幕姬)";
-        refreshIntervalMs = 50;
+        updateIntervalMs = 50;
         lastUpdateTime = std::chrono::steady_clock::now();
         isCustomSize = true;
     }
@@ -50,6 +50,7 @@ public:
         return instance;
     }
 
+    void Toggle() override;
     void Update() override;
     void DrawContent() override;
     void DrawSettings() override;

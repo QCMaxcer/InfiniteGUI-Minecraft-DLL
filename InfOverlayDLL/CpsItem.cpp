@@ -1,6 +1,9 @@
 #include "CPSItem.h"
 #include "App.h"
 #include "CPSDetector.h"
+void CPSItem::Toggle()
+{
+}
 void CPSItem::DrawContent()
 {
     
@@ -15,7 +18,7 @@ void CPSItem::DrawContent()
 
 void CPSItem::DrawSettings()
 {
-    DrawModuleSettings();
+    DrawItemSettings();
     ImGui::Checkbox(u8"×ó¼ü", &showLeft);
     ImGui::Checkbox(u8"ÓÒ¼ü", &showRight);
 

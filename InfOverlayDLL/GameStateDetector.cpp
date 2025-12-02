@@ -1,6 +1,9 @@
 #include "GameStateDetector.h"
 #include "App.h"
 #include "KeyState.h"
+void GameStateDetector::Toggle()
+{
+}
 void GameStateDetector::Update()
 {
 	isInGame = !IsMouseCursorVisible();

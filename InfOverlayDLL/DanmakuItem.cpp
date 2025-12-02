@@ -122,6 +122,10 @@ bool HasFileChanged(const std::wstring& filePath, FILETIME& lastWriteTime)
     return false; // 文件没有变化
 }
 
+void DanmakuItem::Toggle()
+{
+}
+
 void DanmakuItem::Update()
 {
 
@@ -352,7 +356,7 @@ void DanmakuItem::DrawContent()
 
 void DanmakuItem::DrawSettings()
 {
-    DrawModuleSettings();
+    DrawItemSettings();
     ImGuiStd::InputTextStd(u8"弹幕日志文件路径", logPath);
     ImGui::InputInt(u8"最大弹幕数", &maxDanmakuCount);
     if (ImGui::CollapsingHeader(u8"通用设置"))

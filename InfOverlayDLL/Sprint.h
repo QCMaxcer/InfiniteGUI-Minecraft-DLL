@@ -43,7 +43,7 @@ public:
         prefix = u8"[";
         suffix = "]";
 
-        refreshIntervalMs = 5;
+        updateIntervalMs = 5;
         lastUpdateTime = std::chrono::steady_clock::now();
     }
 
@@ -52,6 +52,7 @@ public:
         return instance;
     }
 
+    void Toggle() override;
     void OnKeyEvent(bool state, bool isRepeat, WPARAM key) override;
 
     void Update() override;
@@ -61,6 +62,7 @@ public:
     void Save(nlohmann::json& j) const override;
 
 private:
+
     void GetWalking();
     void GetSneaking();
     void SetSprinting();

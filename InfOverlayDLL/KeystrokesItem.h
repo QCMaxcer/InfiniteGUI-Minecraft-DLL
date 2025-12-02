@@ -80,7 +80,7 @@ public:
         alpha = 0.0f;
         showBorder = false; 
 
-        refreshIntervalMs = 5;
+        updateIntervalMs = 5;
         lastUpdateTime = std::chrono::steady_clock::now();
         key_boxes.push_back(key_box(normal, "W", min_box_size, padding, true, 'W'));
         key_boxes.push_back(key_box(normal, "A", min_box_size, padding, false, 'A'));
@@ -98,6 +98,7 @@ public:
         return instance;
     }
 
+    void Toggle() override;
     void Update() override;
     void DrawContent() override;
     void DrawSettings() override;

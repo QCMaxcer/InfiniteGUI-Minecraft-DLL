@@ -68,7 +68,17 @@ void Menu::Render(bool* done)
 {
     if(!open)
         return;
-
+    static std::once_flag flag2;
+    std::call_once(flag2, [&]
+        {
+            static std::thread announcementThread;
+            // 启动后台线程
+            announcementThread = std::thread([]()
+                {
+                    App::Instance().GetAnnouncement();
+                });
+            announcementThread.detach();
+        });
     //使窗口显示在屏幕中间
     ImGui::SetNextWindowPos(ImVec2((ImGui::GetIO().DisplaySize.x - ImGui::GetIO().DisplaySize.x / 2), (ImGui::GetIO().DisplaySize.y - ImGui::GetIO().DisplaySize.y / 2)), ImGuiCond_Once, ImVec2(0.5f, 0.5f));
     ImGui::SetNextWindowSize(ImVec2((float)opengl_hook::screen_size.x + 10, (float)opengl_hook::screen_size.y + 10), ImGuiCond_Always);
@@ -398,19 +408,6 @@ void Menu::ShowSettings(bool* done)
         //显示公告
         ImGui::BeginChild("Announce", ImVec2(0, 100), true);
 
-
-        static std::once_flag flag2;
-        std::call_once(flag2, [&]
-            {
-                static std::thread announcementThread;
-                    // 启动后台线程
-                announcementThread = std::thread([]()
-                    {
-                        App::Instance().GetAnnouncement();
-                    });
-                announcementThread.detach();
-            });
-
         ImGuiStd::TextShadow(App::Instance().announcement.c_str());
         ImGui::EndChild();
 
@@ -566,7 +563,10 @@ void Menu::DrawItemList()
         if (item->type == Hidden)
             continue;
 
-        ImGui::Checkbox(("##" + std::to_string(i)).c_str(), &item->isEnabled);
+        if (ImGui::Checkbox(("##" + std::to_string(i)).c_str(), &item->isEnabled))
+        {
+            item->Toggle();
+        }
         ImGui::SameLine();
 
         ImGui::Text("[%d] %s", i, item->name.c_str());

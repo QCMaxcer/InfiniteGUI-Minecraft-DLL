@@ -90,6 +90,9 @@
     <Filter Include="ext\gl\rel">
       <UniqueIdentifier>{33b19222-3a3c-4bc6-b10a-e108d94d5727}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\utils\Http">
+      <UniqueIdentifier>{a0cf2560-a2ec-4efd-b0de-5c758620919b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="imgui\imgui.h">
@@ -130,9 +133,6 @@
     </ClInclude>
     <ClInclude Include="GlobalConfig.h">
       <Filter>src\config</Filter>
-    </ClInclude>
-    <ClInclude Include="HttpClient.h">
-      <Filter>src\utils</Filter>
     </ClInclude>
     <ClInclude Include="AudioManager.h">
       <Filter>src\AudioEngine</Filter>
@@ -272,6 +272,12 @@
     <ClInclude Include="gl\wglew.h">
       <Filter>ext\gl</Filter>
     </ClInclude>
+    <ClInclude Include="HttpClient.h">
+      <Filter>src\utils\Http</Filter>
+    </ClInclude>
+    <ClInclude Include="HttpUpdateWorker.h">
+      <Filter>src\utils\Http</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -309,9 +315,6 @@
     </ClCompile>
     <ClCompile Include="GlobalConfig.cpp">
       <Filter>src\config</Filter>
-    </ClCompile>
-    <ClCompile Include="HttpClient.cpp">
-      <Filter>src\utils</Filter>
     </ClCompile>
     <ClCompile Include="AudioManager.cpp">
       <Filter>src\AudioEngine</Filter>
@@ -378,6 +381,15 @@
     </ClCompile>
     <ClCompile Include="opengl_hook.cpp">
       <Filter>src\ui\renderer\hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="HttpModule.h">
+      <Filter>src\core\items\virtual\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="HttpClient.cpp">
+      <Filter>src\utils\Http</Filter>
+    </ClCompile>
+    <ClCompile Include="HttpUpdateWorker.cpp">
+      <Filter>src\utils\Http</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

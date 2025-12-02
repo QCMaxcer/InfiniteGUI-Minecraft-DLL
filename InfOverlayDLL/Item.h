@@ -22,20 +22,26 @@ enum MultiType {
 
 class Item {
 public:
+    Item() {
+    }
     virtual ~Item() {
     }
 
     // ---------------------------
     //   必须被子类实现的接口
     // ---------------------------
-
+    virtual void Toggle() = 0;
     virtual void Load(const nlohmann::json& j) = 0;
     virtual void Save(nlohmann::json& j) const = 0;
     virtual void DrawSettings() = 0;
-
-    void DrawModuleSettings()
+    bool IsMultiInstance() const
     {
-        ImGui::Checkbox(u8"启用", &isEnabled);
+        return multiType == MultiType::MultiInstance;
+    }
+
+    void DrawItemSettings()
+    {
+        if(ImGui::Checkbox(u8"启用", &isEnabled)) Toggle();
     }
 
     void LoadItem(const nlohmann::json& j)
@@ -46,11 +52,6 @@ public:
     {
         j["type"] = name;
         j["isEnabled"] = isEnabled;
-    }
-
-    bool IsMultiInstance() const
-    {
-        return multiType == MultiType::MultiInstance;
     }
 
     bool isEnabled = true; // 是否启用该信息项

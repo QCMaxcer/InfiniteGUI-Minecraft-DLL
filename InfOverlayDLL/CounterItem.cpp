@@ -6,6 +6,10 @@
 #include <string>
 #include <windows.h>
 
+void CounterItem::Toggle()
+{
+}
+
 void CounterItem::OnKeyEvent(bool state, bool isRepeat, WPARAM key)
 {
     if(key == NULL) return;
@@ -56,7 +60,7 @@ void CounterItem::DrawContent()
 
 void CounterItem::DrawSettings()
 {
-    DrawModuleSettings();
+    DrawItemSettings();
     ImGui::InputInt(u8"计数值", &count);
     DrawKeybindSettings();
     if (ImGui::CollapsingHeader(u8"通用设置"))

@@ -19,7 +19,7 @@ public:
         description = u8"显示文件夹内文件数量";
         isPlaySound = true;
         soundVolume = 0.5f;
-        refreshIntervalMs = 1000;
+        updateIntervalMs = 1000;
         lastUpdateTime = std::chrono::steady_clock::now();
 
         prefix = "[";
@@ -27,6 +27,7 @@ public:
 
     }
 
+    void Toggle() override;
     void Update() override;
     void DrawContent() override;
     void DrawSettings() override;

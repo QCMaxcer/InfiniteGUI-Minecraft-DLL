@@ -2,9 +2,13 @@
 #include "ImGuiStd.h"
 
 
+void FpsItem::Toggle()
+{
+}
+
 void FpsItem::Update()
 {
-	FPS = float(frameCount) / (float(refreshIntervalMs) / 1000.0f);
+	FPS = float(frameCount) / (float(updateIntervalMs) / 1000.0f);
 	frameCount = 0;
 }
 void FpsItem::DrawContent()
@@ -16,7 +20,7 @@ void FpsItem::DrawContent()
 
 void FpsItem::DrawSettings()
 {
-	DrawModuleSettings();
+	DrawItemSettings();
 	ImGui::Text(u8"FPS 无额外设置");
 	if (ImGui::CollapsingHeader(u8"通用设置"))
 	{

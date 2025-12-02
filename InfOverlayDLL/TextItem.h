@@ -14,6 +14,8 @@ public:
         description = u8"显示一段文本";
         text = u8"请输入文本";
     }
+
+    void Toggle() override;
     void DrawContent() override;
     void DrawSettings() override;
     void Load(const nlohmann::json& j) override;

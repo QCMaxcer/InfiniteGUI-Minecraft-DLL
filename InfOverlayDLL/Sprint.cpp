@@ -3,6 +3,9 @@
 #include "KeyState.h"
 #include "AudioManager.h"
 #include "GameStateDetector.h"
+void Sprint::Toggle()
+{
+}
 void Sprint::OnKeyEvent(bool state, bool isRepeat, WPARAM key)
 {
     if (key == NULL || !GameStateDetector::Instance().IsInGame()) return;
@@ -105,7 +108,7 @@ void Sprint::DrawContent()
 
 void Sprint::DrawSettings()
 {
-    DrawModuleSettings();
+    DrawItemSettings();
     ImGui::Checkbox(u8"¼¤»î", &isActivated);
     ImGui::Checkbox(u8"ÏÔÊ¾´°¿Ú", &isWindowShow);
 

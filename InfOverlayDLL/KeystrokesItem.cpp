@@ -5,6 +5,9 @@
 #include <string>
 #include <windows.h>
 #include "App.h"
+void KeystrokesItem::Toggle()
+{
+}
 void KeystrokesItem::Update()
 {
     //if(App::Instance().clientHwnd != opengl_hook::handle_window)
@@ -72,7 +75,7 @@ void KeystrokesItem::DrawContent()
 
 void KeystrokesItem::DrawSettings()
 {
-    DrawModuleSettings();
+    DrawItemSettings();
     ImGui::Checkbox(u8"显示空格", &showSpace);
 
     ImGui::Checkbox(u8"显示鼠标", &showMouse);

@@ -30,6 +30,8 @@ public:
     }
     ~CounterItem() {}
 
+
+    void Toggle() override;
     void OnKeyEvent(bool state, bool isRepeat, WPARAM key) override;
     void DrawContent() override;
     void DrawSettings() override;

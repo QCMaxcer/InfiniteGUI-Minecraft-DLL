@@ -26,6 +26,7 @@ public:
         return instance;
     }
 
+    void Toggle() override;
     void DrawContent() override;
     void DrawSettings() override;
     void Load(const nlohmann::json& j) override;
