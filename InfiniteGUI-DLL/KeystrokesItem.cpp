@@ -29,16 +29,15 @@ void KeystrokesItem::DrawContent()
     ImVec2 cursorPos;
     cursorPos.x = min_box_size + padding + window_padding.x;
     cursorPos.y = window_padding.y;
-    if (child_showBorder)  //是否显示边框
-    {
-        ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(0.43f, 0.43f, 0.50f, 0.50f));
-    }
+    ImGui::PushStyleColor(ImGuiCol_Border, *itemStylePtr.borderColor);
+    ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, *itemStylePtr.windowRounding);
+    //ImGui::PushStyleColor(ImGuiCol_ChildBg, itemStylePtr->bgColor);
     for (auto& key_box : key_boxes)
     {
         if(key_box.type == space && !showSpace) continue;
         if(key_box.type == mouse && !showMouse) continue;
-        ImVec4 targetTextColor = key_box.state ? ImVec4(0.0f, 0.0f, 0.0f, 1.0f) : itemStylePtr->fontColor;
-        ImVec4 targetBgColor = key_box.state ? ImVec4(1.0f, 1.0f, 1.0f, 1.0f) : ImVec4(0.0f, 0.0f, 0.0f, 1.0f);
+        ImVec4 targetTextColor = key_box.state ? ImVec4(0.0f, 0.0f, 0.0f, 1.0f) : *itemStylePtr.fontColor;
+        ImVec4 targetBgColor = key_box.state ? ImVec4(1.0f, 1.0f, 1.0f, 1.0f) : *itemStylePtr.bgColor;
 
         //计算速度
         float speed_off = 15.0f * io.DeltaTime;
@@ -47,8 +46,6 @@ void KeystrokesItem::DrawContent()
         key_box.color.backgroundColor = ImLerp(key_box.color.backgroundColor, targetBgColor, key_box.state ? speed_on : speed_off);
 
         ImGui::SetCursorPos(cursorPos);
-        //设置child的背景透明度
-        ImGui::SetNextWindowBgAlpha(child_alpha);
 
         //设置child的背景颜色
         ImGui::PushStyleColor(ImGuiCol_ChildBg, key_box.color.backgroundColor);
@@ -70,7 +67,8 @@ void KeystrokesItem::DrawContent()
         else
             cursorPos.x += key_box.width + padding;
     }
-    if (child_showBorder) ImGui::PopStyleColor(); //是否显示边框
+    ImGui::PopStyleVar(); //窗口圆角
+    ImGui::PopStyleColor(); //是否显示边框
 }
 
 void KeystrokesItem::DrawSettings()
@@ -81,7 +79,6 @@ void KeystrokesItem::DrawSettings()
     ImGui::Checkbox(u8"显示鼠标", &showMouse);
     ImGui::Checkbox(u8"显示CPS", &showCps);
     ImGui::Separator();
-    ImGui::Checkbox(u8"显示边框", &child_showBorder);
     bool needResize = false;
     if(ImGui::SliderFloat(u8"按键边长", &min_box_size, 12.0f, 108.0f, "%.1f"))
     {
@@ -98,14 +95,14 @@ void KeystrokesItem::DrawSettings()
             key_box.SetSize(min_box_size, padding);
         }
     }
-    ImGui::SliderFloat(u8"背景透明度", &child_alpha, 0.0f, 1.0f, "%.1f");
-    ImGui::InputFloat(u8"字体大小", &itemStyle.fontSize, 1.0f, 1.0f, "%.1f");
-    ImVec4* colors = ImGui::GetStyle().Colors;
-    ImGuiStd::EditColor(u8"字体颜色", itemStyle.fontColor, colors[ImGuiCol_Text]);
-    //if (ImGui::CollapsingHeader(u8"通用设置"))
-    //{
-    //    DrawWindowSettings();
-    //}
+    //ImGui::SliderFloat(u8"背景透明度", &child_alpha, 0.0f, 1.0f, "%.1f");
+    //ImGui::InputFloat(u8"字体大小", &itemStyle.fontSize, 1.0f, 1.0f, "%.1f");
+    //ImVec4* colors = ImGui::GetStyle().Colors;
+    //ImGuiStd::EditColor(u8"字体颜色", itemStyle.fontColor, colors[ImGuiCol_Text]);
+    if (ImGui::CollapsingHeader(u8"通用设置"))
+    {
+        DrawWindowSettings();
+    }
 }
 
 void KeystrokesItem::Load(const nlohmann::json& j)
@@ -116,9 +113,6 @@ void KeystrokesItem::Load(const nlohmann::json& j)
     if (j.contains("showCps")) showCps = j["showCps"];
     if (j.contains("min_box_size")) min_box_size = j["min_box_size"];
     if (j.contains("padding")) padding = j["padding"];
-    if (j.contains("child_alpha")) child_alpha = j["child_alpha"];
-    if (j.contains("child_showBorder")) child_showBorder = j["child_showBorder"];
-
     for (auto& key_box : key_boxes)
     {
         key_box.SetSize(min_box_size, padding);
@@ -135,6 +129,4 @@ void KeystrokesItem::Save(nlohmann::json& j) const
     j["showCps"] = showCps;
     j["min_box_size"] = min_box_size;
     j["padding"] = padding;
-    j["child_alpha"] = child_alpha;
-    j["child_showBorder"] = child_showBorder;
 }

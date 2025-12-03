@@ -260,7 +260,7 @@ void DanmakuItem::DrawContent()
 
 
     //设置背景透明度
-    ImGui::PushStyleColor(ImGuiCol_ChildBg, itemStylePtr->bgColor);
+    ImGui::PushStyleColor(ImGuiCol_ChildBg, *itemStylePtr.bgColor);
 
     ImGuiChildFlags child_flags = 0;
     if (!isScrollable) {
@@ -269,7 +269,7 @@ void DanmakuItem::DrawContent()
     }
 
     // 绘制弹幕信息
-    ImGui::BeginChild("DanmakuList", ImVec2(0, -itemStylePtr->fontSize - 10), true, child_flags);
+    ImGui::BeginChild("DanmakuList", ImVec2(0, -*itemStylePtr.fontSize - 10), true, child_flags);
 
     if (ImGui::IsWindowFocused() && ImGui::IsWindowHovered())
     {
@@ -312,12 +312,12 @@ void DanmakuItem::DrawContent()
         ImGui::Separator();
         textHeight += ImGui::GetItemRectSize().y + ImGui::GetStyle().ItemSpacing.y;
         ImGui::SetCursorPosX(10);
-        ImGui::PushFont(NULL, itemStylePtr->fontSize * 0.8f);
+        ImGui::PushFont(NULL, *itemStylePtr.fontSize * 0.8f);
         ImGuiStd::TextColoredShadow(ImVec4(0.7f, 0.7f, 0.7f, 1.0f), (danmaku.username + " : ").c_str());
         textHeight += ImGui::GetItemRectSize().y + ImGui::GetStyle().ItemSpacing.y;
         ImGui::PopFont();
-        ImGui::PushFont(NULL, itemStylePtr->fontSize);
-        ImGui::SetCursorPosX(10 + itemStylePtr->fontSize);
+        ImGui::PushFont(NULL, *itemStylePtr.fontSize);
+        ImGui::SetCursorPosX(10 + *itemStylePtr.fontSize);
         ImGuiStd::TextColoredShadow(it_anim->second.color, danmaku.message.c_str());
         textHeight += ImGui::GetItemRectSize().y + ImGui::GetStyle().ItemSpacing.y - 1.5f;
         ImGui::PopFont();
@@ -335,7 +335,7 @@ void DanmakuItem::DrawContent()
     // 绘制底部信息
 
     ImGui::SetCursorPosX(10);
-    ImGui::PushFont(NULL, itemStylePtr->fontSize);
+    ImGui::PushFont(NULL, *itemStylePtr.fontSize);
     switch (bottomMessageType) {
     case BTM_GIFT:
         ImGuiStd::TextColoredShadow(ImVec4(1.0f, 84.31f, 0.0f, 1.0f), bottomMessage.c_str()); //金色

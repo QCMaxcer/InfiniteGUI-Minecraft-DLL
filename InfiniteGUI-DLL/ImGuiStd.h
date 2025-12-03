@@ -6,6 +6,7 @@
 #include <Windows.h>
 #include <map>
 #include <nlohmann/json.hpp>
+#include "App.h"
 
 namespace ImGuiStd {
 
@@ -172,8 +173,7 @@ namespace ImGuiStd {
         ImVec2 popup_size = ImVec2(0, 0);
     };
     static ImGuiID current_edit_color_element_id = 0;
-
-    static void EditColor(const char* label, ImVec4& color, ImVec4 refColor, ImGuiColorEditFlags flags = ImGuiColorEditFlags_AlphaPreviewHalf | ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_NoSidePreview | ImGuiColorEditFlags_NoLabel)
+    static bool EditColor(const char* label, ImVec4& color, ImVec4 refColor, ImGuiColorEditFlags flags = ImGuiColorEditFlags_AlphaPreviewHalf | ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_NoSidePreview | ImGuiColorEditFlags_NoLabel)
     {
         //ImGuiStyle& style = ImGui::GetStyle();
         //ImGui::ColorEdit4(label, (float*)&color, ImGuiColorEditFlags_AlphaBar | flags);
@@ -185,6 +185,7 @@ namespace ImGuiStd {
         //    //ImGui::SameLine(0.0f, style.ItemInnerSpacing.x); if (ImGui::Button(u8"保存")) { refColor = color; }
         //    ImGui::SameLine(0.0f, style.ItemInnerSpacing.x); if (ImGui::Button(u8"还原")) { color = refColor; }
         //}
+        bool changed = false;
         static std::map<const char*, edit_color_element> edit_color_elements;
         if (edit_color_elements.find(label) == edit_color_elements.end())
         {
@@ -212,18 +213,71 @@ namespace ImGuiStd {
             element.popup_size = ImLerp(element.popup_size, target_size, speed);
             //TextShadow(label);
             //ImGui::Spacing();
-            ImGui::ColorPicker4(label, (float*)&color, flags, (float*)&refColor);
+            if (ImGui::ColorPicker4(label, (float*)&color, flags, (float*)&refColor))
+            {
+                changed = true;
+            }
             ImGui::EndPopup();
         }
         if (memcmp(&color, &refColor, sizeof(ImVec4)) != 0)
         {
-            ImGui::SameLine(); if (ImGui::Button((u8"还原初始颜色" + std::string(u8"##") + std::to_string(element.id)).c_str())) { color = refColor; }
+            ImGui::PushFont(App::Instance().iconFont);
+            ImGui::SameLine(); if (ImGui::Button(("Z" + std::string(u8"##") + std::to_string(element.id)).c_str())) { color = refColor; changed = true; }
+            ImGui::PopFont();
+            if (ImGui::IsItemHovered())
+            {
+                ImGui::SetTooltip(u8"还原初始样式");
+            }
         }
+        return changed;
     }
 
-    static void EditColor(const char* label, ImVec4& color, ImGuiColorEditFlags flags = 0)
+    static bool EditColor(const char* label, ImVec4& color, ImGuiColorEditFlags flags = ImGuiColorEditFlags_AlphaPreviewHalf | ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_NoSidePreview | ImGuiColorEditFlags_NoLabel)
     {
-        ImGui::ColorEdit4(label, (float*)&color, ImGuiColorEditFlags_AlphaBar | flags);
+        //ImGuiStyle& style = ImGui::GetStyle();
+        //ImGui::ColorEdit4(label, (float*)&color, ImGuiColorEditFlags_AlphaBar | flags);
+        //if (memcmp(&color, &refColor, sizeof(ImVec4)) != 0)
+        //{
+        //    // Tips: in a real user application, you may want to merge and use an icon font into the main font,
+        //    // so instead of "Save"/"Revert" you'd use icons!
+        //    // Read the FAQ and docs/FONTS.md about using icon fonts. It's really easy and super convenient!
+        //    //ImGui::SameLine(0.0f, style.ItemInnerSpacing.x); if (ImGui::Button(u8"保存")) { refColor = color; }
+        //    ImGui::SameLine(0.0f, style.ItemInnerSpacing.x); if (ImGui::Button(u8"还原")) { color = refColor; }
+        //}
+        bool changed = false;
+        static std::map<const char*, edit_color_element> edit_color_elements;
+        if (edit_color_elements.find(label) == edit_color_elements.end())
+        {
+            edit_color_element element;
+            element.id = current_edit_color_element_id++;
+            edit_color_elements[label] = element;
+        }
+        edit_color_element& element = edit_color_elements[label];\
+            ImVec2 target_size = ImVec2(338, 366);
+        float speed = 10.0f * ImGui::GetIO().DeltaTime;
+        std::string text = label + std::string(u8"：");
+
+        TextShadow(text.c_str());
+        ImGui::SameLine();
+
+        if (ImGui::ColorButton(label, color, flags))
+        {
+            ImGui::OpenPopup(label);
+            element.popup_size = ImVec2(0, 0);
+        }
+
+        ImGui::SetNextWindowSize(element.popup_size, ImGuiCond_Always);
+        if (ImGui::BeginPopup(label, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse))
+        {
+            element.popup_size = ImLerp(element.popup_size, target_size, speed);
+            //TextShadow(label);
+            //ImGui::Spacing();
+            if (ImGui::ColorPicker4(label, (float*)&color, flags))
+            {
+                changed = true;
+            }
+            ImGui::EndPopup();
+        }
     }
 
     static void SaveImVec4(nlohmann::json& j, const char* key, const ImVec4& v)

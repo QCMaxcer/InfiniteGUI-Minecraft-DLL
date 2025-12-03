@@ -76,10 +76,9 @@ public:
         isEnabled = false;
         name = u8"按键显示";
         description = u8"显示按键状态";
+        isTransparentBg = true;
         isCustomSize = false;
-        isCustomStyle = true;
-        itemStyle.bgColor = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
-        itemStyle.borderColor = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
+        //isCustomStyle = true;
 
         updateIntervalMs = 5;
         lastUpdateTime = std::chrono::steady_clock::now();
@@ -113,6 +112,4 @@ private:
     std::vector<key_box> key_boxes;
     float padding = 6.0f;
     float min_box_size = 32.0f;
-    float child_alpha = 0.5f;
-    bool child_showBorder = false;
 };

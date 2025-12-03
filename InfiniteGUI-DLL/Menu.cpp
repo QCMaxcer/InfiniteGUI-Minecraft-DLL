@@ -3,8 +3,6 @@
 #include "imgui/imgui_internal.h"
 #include "ImGuiStd.h"
 #include "App.h"
-#include "Images.h"
-#include "pics\MCInjector-small.h"
 #include "ConfigManager.h"
 #include "GlobalConfig.h"
 #include "FileUtils.h"
@@ -68,17 +66,7 @@ void Menu::Render(bool* done)
 {
     if(!open)
         return;
-    static std::once_flag flag2;
-    std::call_once(flag2, [&]
-        {
-            static std::thread announcementThread;
-            // 启动后台线程
-            announcementThread = std::thread([]()
-                {
-                    App::Instance().GetAnnouncement();
-                });
-            announcementThread.detach();
-        });
+
     //使窗口显示在屏幕中间
     ImGui::SetNextWindowPos(ImVec2((ImGui::GetIO().DisplaySize.x - ImGui::GetIO().DisplaySize.x / 2), (ImGui::GetIO().DisplaySize.y - ImGui::GetIO().DisplaySize.y / 2)), ImGuiCond_Once, ImVec2(0.5f, 0.5f));
     ImGui::SetNextWindowSize(ImVec2((float)opengl_hook::screen_size.x + 10, (float)opengl_hook::screen_size.y + 10), ImGuiCond_Always);
@@ -268,6 +256,11 @@ void Menu::ShowSidePanels()
         //ImGui::PushFont(io.FontDefault);
         ImGuiStd::TextShadow(u8"   -25.11.30-    |    -B0.9.0-");
         ImGui::BulletText(u8"发布第一支测试版本");
+        ImGui::Separator();
+        ImGuiStd::TextShadow(u8"   -25.11.30-    |    -B0.9.1-");
+        ImGui::BulletText(u8"优化资源位置");
+        ImGui::BulletText(u8"添加窗口样式自定义");
+        ImGui::Separator();
         ImGui::EndChild();
         ImGui::End();
 
@@ -279,11 +272,6 @@ void Menu::ShowSidePanels()
 // LOGO 顶部动画面板
 //======================
     {
-        static std::once_flag flag;
-        std::call_once(flag, [&]
-            {
-                App::Instance().logoTexture.id = LoadTextureFromMemory(logo, logoSize, &App::Instance().logoTexture.width, &App::Instance().logoTexture.height);
-            });
         // 按钮中心
         ImVec2 startPos = Center;
 

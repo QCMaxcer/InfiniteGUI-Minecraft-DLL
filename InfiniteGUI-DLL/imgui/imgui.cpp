@@ -11975,6 +11975,7 @@ void ImGui::SetTooltip(const char* fmt, ...)
     va_end(args);
 }
 
+
 void ImGui::SetTooltipV(const char* fmt, va_list args)
 {
     if (!BeginTooltipEx(ImGuiTooltipFlags_OverridePrevious, ImGuiWindowFlags_None))

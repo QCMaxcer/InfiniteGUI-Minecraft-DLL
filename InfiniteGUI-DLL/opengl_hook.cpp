@@ -7,6 +7,11 @@
 #include "menu.h"
 #include "ItemManager.h"
 #include "gui.h"
+
+#include "App.h"
+#include "Images.h"
+#include "pics\MCInjector-small.h"
+#include <thread>
 //#include <base/voyage.h>
 //#include <mutex>
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -151,6 +156,19 @@ bool detour_wgl_swap_buffers(HDC hdc)
 	if (WindowFromDC(hdc) != opengl_hook::handle_window) return wgl_swap_buffers_hook.GetOrignalFunc()(hdc);
 
 	wglMakeCurrent(hdc, opengl_hook::custom_gl_ctx);
+
+	static std::once_flag flag2;
+	std::call_once(flag2, [&]
+		{
+			static std::thread announcementThread;
+			// 启动后台线程
+			announcementThread = std::thread([]()
+				{
+					App::Instance().GetAnnouncement();
+				});
+			announcementThread.detach();
+			App::Instance().logoTexture.id = LoadTextureFromMemory(logo, logoSize, &App::Instance().logoTexture.width, &App::Instance().logoTexture.height);
+		});
 
 	// 切换 ImGui 鼠标捕获设置
 	ImGuiIO& io = ImGui::GetIO();
