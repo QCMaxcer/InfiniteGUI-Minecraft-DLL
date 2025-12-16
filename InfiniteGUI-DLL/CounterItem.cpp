@@ -58,17 +58,14 @@ void CounterItem::DrawContent()
 
 }
 
-void CounterItem::DrawSettings()
+void CounterItem::DrawSettings(const float& bigPadding, const float& centerX, const float& itemWidth)
 {
     //DrawItemSettings();
     ImGui::InputInt(u8"计数值", &count);
-    DrawKeybindSettings();
-    if (ImGui::CollapsingHeader(u8"通用设置"))
-    {
-        DrawAffixSettings();
-        DrawSoundSettings();
-        DrawWindowSettings();
-    }
+    DrawKeybindSettings(bigPadding, centerX, itemWidth);
+    DrawAffixSettings(bigPadding, centerX, itemWidth);
+    DrawSoundSettings(bigPadding, centerX, itemWidth);
+    DrawWindowSettings(bigPadding, centerX, itemWidth);
 }
 
 void CounterItem::Load(const nlohmann::json& j)

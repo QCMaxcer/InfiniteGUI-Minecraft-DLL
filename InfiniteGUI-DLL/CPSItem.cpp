@@ -21,17 +21,13 @@ void CPSItem::DrawContent()
     ImGuiStd::TextColoredShadow(color.color, (prefix + text + suffix).c_str());
 }
 
-void CPSItem::DrawSettings()
+void CPSItem::DrawSettings(const float& bigPadding, const float& centerX, const float& itemWidth)
 {
     //DrawItemSettings();
     ImGui::Checkbox(u8"×ó¼ü", &showLeft);
     ImGui::Checkbox(u8"ÓÒ¼ü", &showRight);
-
-    if (ImGui::CollapsingHeader(u8"Í¨ÓÃÉèÖÃ"))
-    {
-        DrawAffixSettings();
-        DrawWindowSettings();
-    }
+    DrawAffixSettings(bigPadding, centerX, itemWidth);
+    DrawWindowSettings(bigPadding, centerX, itemWidth);
 }
 
 void CPSItem::Load(const nlohmann::json& j)

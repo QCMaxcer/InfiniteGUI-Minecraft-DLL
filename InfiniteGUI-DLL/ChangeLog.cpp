@@ -26,6 +26,7 @@ void ChangeLog::Init()
     AddContent(ADD, u8"添加点击特效");
     AddContent(CHANGE, u8"更改默认字体为平滑字体");
     AddContent(CHANGE, u8"按键显示空格改为直线");
+    AddContent(CHANGE, u8"改进架构,仅文本显示可多例");
 } //我写这个真是个天才，这样就不用手敲Imgui代码了，天才天才天才天
 
 ChangeLog::ChangeLog()

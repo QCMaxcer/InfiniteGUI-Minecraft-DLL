@@ -16,7 +16,6 @@ class BilibiliFansItem : public Item, public AffixModule, public SoundModule, pu
 public:
     BilibiliFansItem() {
         type = Hud; // 信息项类型
-        multiType = MultiInstance;    // 信息项是否可以多开
         name = u8"粉丝数显示";
         description = u8"显示B站用户的粉丝数";
         icon = u8"\uE045";
@@ -33,6 +32,10 @@ public:
         }
     }
 
+    static BilibiliFansItem& Instance() {
+        static BilibiliFansItem instance;
+        return instance;
+    }
 
     void Toggle() override;
     void Reset() override
@@ -40,6 +43,7 @@ public:
         ResetAffix();
         ResetSound();
         ResetWindow();
+        isEnabled = false;
         prefix = u8"[粉丝数:";
         suffix = "]";
         if (httpTaskId != -1)
@@ -54,7 +58,7 @@ public:
     void HttpRemoveTask() override;
     void Update() override;
     void DrawContent() override;
-    void DrawSettings() override;
+    void DrawSettings(const float& bigPadding, const float& centerX, const float& itemWidth) override;
     void Load(const nlohmann::json& j) override;
     void Save(nlohmann::json& j) const override;
 

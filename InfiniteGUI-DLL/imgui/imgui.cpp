@@ -1149,6 +1149,8 @@ IMPLEMENTING SUPPORT for ImGuiBackendFlags_RendererHasTextures:
 // [SECTION] INCLUDES
 //-------------------------------------------------------------------------
 
+#include <algorithm>
+#include <cmath>
 #if defined(_MSC_VER) && !defined(_CRT_SECURE_NO_WARNINGS)
 #define _CRT_SECURE_NO_WARNINGS
 #endif
@@ -7825,11 +7827,15 @@ bool ImGui::Begin(const char* name, bool* p_open, ImGuiWindowFlags flags)
         window->ScrollMax.x = ImMax(0.0f, window->ContentSize.x + window->WindowPadding.x * 2.0f - window->InnerRect.GetWidth());
         window->ScrollMax.y = ImMax(0.0f, window->ContentSize.y + window->WindowPadding.y * 2.0f - window->InnerRect.GetHeight());
 
+        float scrollSpeed = std::clamp(20.0f * g.IO.DeltaTime, 0.05f, 50.0f);
+
         // Apply scrolling
-        window->Scroll = CalcNextScrollFromScrollTargetAndClamp(window);
+        window->ScrollAnimTarget = CalcNextScrollFromScrollTargetAndClamp(window);
+        window->Scroll = ImLerp(window->Scroll, window->ScrollAnimTarget, scrollSpeed);
+        if (std::abs(window->ScrollAnimTarget.y - window->Scroll.y) < 1.0f) window->Scroll = window->ScrollAnimTarget;
         window->ScrollTarget = ImVec2(FLT_MAX, FLT_MAX);
         window->DecoInnerSizeX1 = window->DecoInnerSizeY1 = 0.0f;
-
+        //flag max addon 2
         // DRAWING
 
         // Setup draw list and outer clipping rectangle
@@ -11676,7 +11682,7 @@ static float CalcScrollEdgeSnap(float target, float snap_min, float snap_max, fl
 
 static ImVec2 CalcNextScrollFromScrollTargetAndClamp(ImGuiWindow* window)
 {
-    ImVec2 scroll = window->Scroll;
+    ImVec2 scroll = window->ScrollAnimTarget;  //flag max addon 3
     ImVec2 decoration_size(window->DecoOuterSizeX1 + window->DecoInnerSizeX1 + window->DecoOuterSizeX2, window->DecoOuterSizeY1 + window->DecoInnerSizeY1 + window->DecoOuterSizeY2);
     for (int axis = 0; axis < 2; axis++)
     {

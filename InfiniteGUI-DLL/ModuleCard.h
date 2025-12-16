@@ -30,43 +30,38 @@ public:
 	{
 		m_item = item;
 		//分析item
-		if (!item->IsMultiInstance())
+		if (auto sound = dynamic_cast<SoundModule*>(item))
 		{
-			if (auto sound = dynamic_cast<SoundModule*>(item))
-			{
 
-				MyButton* soundButton = new MyButton(u8"\uE060", ImVec2(moduleButtonSize.y, moduleButtonSize.y));
-				if (sound->IsPlaySound())
-				{
-					soundButton->SetSelected(true);
-				}
-				else
-				{
-					soundButton->SetLabelText(u8"\uE061");
-					soundButton->SetSelected(false);
-				}
-				m_Buttons.push_back({ soundButton, Button_Sound });
-			}
-			if (auto win = dynamic_cast<WindowModule*>(item))
+			MyButton* soundButton = new MyButton(u8"\uE060", ImVec2(moduleButtonSize.y, moduleButtonSize.y));
+			if (sound->IsPlaySound())
 			{
-				MyButton* lockButton = new MyButton(u8"\uE013", ImVec2(moduleButtonSize.y, moduleButtonSize.y));
-				if (win->IsClickThrough())
-				{
-					lockButton->SetSelected(true);
-				}
-				else
-				{
-					lockButton->SetLabelText(u8"\uE014");
-					lockButton->SetSelected(false);
-				}
-				m_Buttons.push_back({ lockButton, Button_Lock });
+				soundButton->SetSelected(true);
 			}
-			MyButton* settingButton = new MyButton("~", ImVec2(moduleButtonSize.y, moduleButtonSize.y));
-			m_Buttons.push_back({ settingButton, Button_Setting });
+			else
+			{
+				soundButton->SetLabelText(u8"\uE061");
+				soundButton->SetSelected(false);
+			}
+			m_Buttons.push_back({ soundButton, Button_Sound });
 		}
+		if (auto win = dynamic_cast<WindowModule*>(item))
+		{
+			MyButton* lockButton = new MyButton(u8"\uE013", ImVec2(moduleButtonSize.y, moduleButtonSize.y));
+			if (win->IsClickThrough())
+			{
+				lockButton->SetSelected(true);
+			}
+			else
+			{
+				lockButton->SetLabelText(u8"\uE014");
+				lockButton->SetSelected(false);
+			}
+			m_Buttons.push_back({ lockButton, Button_Lock });
+		}
+		MyButton* settingButton = new MyButton("~", ImVec2(moduleButtonSize.y, moduleButtonSize.y));
+		m_Buttons.push_back({ settingButton, Button_Setting });
 		moduleButtonWidth = moduleCardWidth - (float)m_Buttons.size() * (moduleButtonSize.y + padding);
-
-
 		m_moduleButton = new ModuleButton(item->icon.c_str(), item->name.c_str(), item->description.c_str(), ImVec2(moduleButtonWidth, moduleButtonSize.y));
 	}
 

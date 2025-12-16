@@ -100,19 +100,16 @@ void FileCountItem::DrawContent()
     ImGuiStd::TextColoredShadow(color.color, (prefix + std::to_string(fileCount) + errorMessage + suffix).c_str());
 }
 
-void FileCountItem::DrawSettings()
+void FileCountItem::DrawSettings(const float& bigPadding, const float& centerX, const float& itemWidth)
 {
     //DrawItemSettings();
     ImGuiStd::InputTextStd(u8"文件夹路径", folderPath);
     ImGui::Checkbox(u8"递归扫描(包括子文件夹)", &recursive);
     ImGuiStd::InputTextStd(u8"扩展名过滤 (.txt)", extensionFilter);
 
-    if (ImGui::CollapsingHeader(u8"通用设置"))
-    {
-        DrawAffixSettings();
-        DrawSoundSettings();
-        DrawWindowSettings();
-    }
+    DrawAffixSettings(bigPadding, centerX, itemWidth);
+    DrawSoundSettings(bigPadding, centerX, itemWidth);
+    DrawWindowSettings(bigPadding, centerX, itemWidth);
 }
 
 void FileCountItem::Load(const nlohmann::json& j)

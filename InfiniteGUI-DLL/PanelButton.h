@@ -46,21 +46,14 @@ public:
 			initialized = true;
 		}
 
-		bool posChanged = false;
-
 		screenPos = ImGui::GetCursorScreenPos(); //初始位置由ImGui自动计算
 		if (IsPositionChanged(screenPos, lastScreenPos))
 		{
-			posChanged = true;
+			SetStateData();
+			ApllyCenterPositionChange();
 			lastScreenPos = screenPos;
 		}
 
-		skipAnim = posChanged ? true : skipAnim; //是否跳过动画
-		if (posChanged)
-		{
-			SetStateData();
-			m_current = *m_target;
-		}
 		bool pressed = DrawInvisibleButton(m_current.button);
 		rightClicked = ImGui::IsItemClicked(1); //右键单击
 		bool hovered = ImGui::IsItemHovered();
@@ -98,24 +91,21 @@ public:
 		// -------------------------------------------------
 		// 动画 Lerp（每帧插值）
 		// -------------------------------------------------
-		if(!posChanged)
+		if (lastState != m_state)
 		{
-			if (lastState != m_state)
-			{
-				skipAnim = false;
-				lastState = m_state;
-			}
-			if (!IsAnimating())
-			{
-				skipAnim = true;
-			}
-			if (!skipAnim)
-			{
-				ImGuiIO& io = ImGui::GetIO();
-				LerpAll(m_current, *m_target, animSpeed, io.DeltaTime);
-			}
+			skipAnim = false;
+			lastState = m_state;
 		}
-		// -------------------------------------------------
+		if (!IsAnimating())
+		{
+			skipAnim = true;
+		}
+		if (!skipAnim)
+		{
+			ImGuiIO& io = ImGui::GetIO();
+			LerpAll(m_current, *m_target, animSpeed, io.DeltaTime);
+		}
+	// -------------------------------------------------
 		// 绘制
 		// -------------------------------------------------
 
@@ -168,6 +158,15 @@ private:
 	PanelButtonStateData m_active; //鼠标按住状态
 	PanelButtonStateData m_current; //当前状态
 	PanelButtonStateData* m_target; //用这个指针设置目标状态
+
+
+	void ApllyCenterPositionChange() override
+	{
+		ImVec2 value = CalPostionChangedValue(screenPos, lastScreenPos);
+		ApllyButtonPositionChange(m_current.button, value);
+		ApllyTextPositionChange(m_current.label, value);
+		ApllyTextPositionChange(m_current.icon, value);
+	}
 
 	void SetNextCursorScreenPos() const //下一个控件位置一定由初始位置 + 初始大小 + 边距决定，否则会发生偏移
 	{

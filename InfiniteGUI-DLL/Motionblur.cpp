@@ -33,7 +33,7 @@ uniform bool smooth_blur;
 
 vec4 blurHistory(vec2 uv)
 {
-    float offset = 0.0007 * velocity_factor;
+    float offset = 0.0005 * velocity_factor;
     vec4 sum = vec4(0.0);
 
     sum += texture(historyTexture, uv + vec2(-offset, 0.0)) * 0.25;
@@ -308,7 +308,7 @@ void Motionblur::Save(nlohmann::json& j) const
 	j["FpsModulate"] = FpsModulate;
 }
 
-void Motionblur::DrawSettings()
+void Motionblur::DrawSettings(const float& bigPadding, const float& centerX, const float& itemWidth)
 {
 	//DrawItemSettings();
 	ImGui::SliderFloat(u8"Ä£ºýÇ¿¶È", &blurriness_value, 0.0f, 40.0f, "%.1f");

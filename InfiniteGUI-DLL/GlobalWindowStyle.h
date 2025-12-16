@@ -6,7 +6,6 @@ class GlobalWindowStyle : public WindowStyleModule, public Item {
 public:
     GlobalWindowStyle() {
         type = Hidden; // 信息项类型
-        multiType = Singleton;    // 信息项是否可以多开
         name = u8"全局窗口样式";
         description = u8"设置全局窗口样式";
         icon = "L";
@@ -28,7 +27,7 @@ public:
     }
     void Load(const nlohmann::json& j) override;
     void Save(nlohmann::json& j) const override;
-    void DrawSettings() override;
+    void DrawSettings(const float& bigPadding, const float& centerX, const float& itemWidth) override;
     ItemStyle& GetGlobeStyle();
 private:
 };

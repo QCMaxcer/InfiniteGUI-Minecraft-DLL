@@ -30,8 +30,10 @@ void GameStateDetector::Save(nlohmann::json& j) const
 	j["hideItemInGui"] = hideItemInGui;
 }
 
-void GameStateDetector::DrawSettings()
+void GameStateDetector::DrawSettings(const float& bigPadding, const float& centerX, const float& itemWidth)
 {
+	ImGui::SetCursorPosX(bigPadding);
+	ImGui::PushItemWidth(itemWidth);
 	ImGui::Checkbox(u8"仅在游戏内显示窗口", &hideItemInGui);
 }
 

@@ -38,16 +38,12 @@ void TimeItem::DrawContent()
     ImGuiStd::TextColoredShadow(color.color, (prefix + currentTimeStr + suffix).c_str());
 }
 
-void TimeItem::DrawSettings()
+void TimeItem::DrawSettings(const float& bigPadding, const float& centerX, const float& itemWidth)
 {
     //DrawItemSettings();
     ImGui::Text(u8"时钟 无额外设置");
-    if (ImGui::CollapsingHeader(u8"通用设置"))
-    {
-        DrawAffixSettings();
-        DrawWindowSettings();
-    }
-
+    DrawAffixSettings(bigPadding, centerX, itemWidth);
+    DrawWindowSettings(bigPadding, centerX, itemWidth);
 }
 
 void TimeItem::Load(const nlohmann::json& j)

@@ -125,6 +125,9 @@
     <Filter Include="src\core\items\huds\menu\widgets\buttons">
       <UniqueIdentifier>{8d80dcad-b7ef-4c57-ae8a-7608c887ed93}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\core\items\huds\text">
+      <UniqueIdentifier>{d4a13443-8789-47f5-9e42-c1fe16bf6833}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Init.hpp">
@@ -227,9 +230,6 @@
       <Filter>src\core\items\huds</Filter>
     </ClInclude>
     <ClInclude Include="KeystrokesItem.h">
-      <Filter>src\core\items\huds</Filter>
-    </ClInclude>
-    <ClInclude Include="TextItem.h">
       <Filter>src\core\items\huds</Filter>
     </ClInclude>
     <ClInclude Include="TimeItem.h">
@@ -385,6 +385,12 @@
     <ClInclude Include="menuRule.h">
       <Filter>src\core\items\huds\menu\widgets</Filter>
     </ClInclude>
+    <ClInclude Include="TextItem.h">
+      <Filter>src\core\items\huds\text</Filter>
+    </ClInclude>
+    <ClInclude Include="Text.h">
+      <Filter>src\core\items\huds\text</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -456,9 +462,6 @@
     <ClCompile Include="KeystrokesItem.cpp">
       <Filter>src\core\items\huds</Filter>
     </ClCompile>
-    <ClCompile Include="TextItem.cpp">
-      <Filter>src\core\items\huds</Filter>
-    </ClCompile>
     <ClCompile Include="TimeItem.cpp">
       <Filter>src\core\items\huds</Filter>
     </ClCompile>
@@ -509,6 +512,12 @@
     </ClCompile>
     <ClCompile Include="ClickEffect.cpp">
       <Filter>src\core\items\visual</Filter>
+    </ClCompile>
+    <ClCompile Include="TextItem.cpp">
+      <Filter>src\core\items\huds\text</Filter>
+    </ClCompile>
+    <ClCompile Include="Text.cpp">
+      <Filter>src\core\items\huds\text</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

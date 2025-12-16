@@ -76,7 +76,7 @@ void KeystrokesItem::DrawContent()
     ImGui::PopStyleColor(2); //是否显示边框
 }
 
-void KeystrokesItem::DrawSettings()
+void KeystrokesItem::DrawSettings(const float& bigPadding, const float& centerX, const float& itemWidth)
 {
     //DrawItemSettings();
     ImGui::Checkbox(u8"显示空格", &showSpace);
@@ -100,14 +100,7 @@ void KeystrokesItem::DrawSettings()
             key_box.SetSize(min_box_size, padding);
         }
     }
-    //ImGui::SliderFloat(u8"背景透明度", &child_alpha, 0.0f, 1.0f, "%.1f");
-    //ImGui::InputFloat(u8"字体大小", &itemStyle.fontSize, 1.0f, 1.0f, "%.1f");
-    //ImVec4* colors = ImGui::GetStyle().Colors;
-    //ImGuiStd::EditColor(u8"字体颜色", itemStyle.fontColor, colors[ImGuiCol_Text]);
-    if (ImGui::CollapsingHeader(u8"通用设置"))
-    {
-        DrawWindowSettings();
-    }
+    DrawWindowSettings(bigPadding, centerX, itemWidth);
 }
 
 void KeystrokesItem::Load(const nlohmann::json& j)

@@ -75,7 +75,7 @@ void BilibiliFansItem::DrawContent()
     ImGuiStd::TextColoredShadow(color.color, (prefix + std::to_string(fansCount) + suffix).c_str());
 }
 
-void BilibiliFansItem::DrawSettings()
+void BilibiliFansItem::DrawSettings(const float& bigPadding, const float& centerX, const float& itemWidth)
 {
     //DrawItemSettings();
     static std::string uidStr = std::to_string(uid);
@@ -101,12 +101,9 @@ void BilibiliFansItem::DrawSettings()
             HttpResetTask();
         }
     }
-    if (ImGui::CollapsingHeader(u8"Õ®”√…Ë÷√"))
-    {
-        DrawAffixSettings();
-        DrawSoundSettings();
-        DrawWindowSettings();
-    }
+    DrawAffixSettings(bigPadding, centerX, itemWidth);
+    DrawSoundSettings(bigPadding, centerX, itemWidth);
+    DrawWindowSettings(bigPadding, centerX, itemWidth);
 }
 
 void BilibiliFansItem::Load(const nlohmann::json& j)

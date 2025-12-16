@@ -15,7 +15,6 @@ class CounterItem : public Item, public AffixModule, public WindowModule, public
 public:
     CounterItem() {
         type = Hud; // 信息项类型
-        multiType = MultiInstance;    // 信息项是否可以多开
         name = u8"计数器";
         description = u8"显示计数器";
         icon = "X";
@@ -23,6 +22,10 @@ public:
     }
     ~CounterItem() {}
 
+    static CounterItem& Instance() {
+        static CounterItem text;
+        return text;
+    }
 
     void Toggle() override;
     void Reset() override
@@ -44,7 +47,7 @@ public:
     }
     void OnKeyEvent(bool state, bool isRepeat, WPARAM key) override;
     void DrawContent() override;
-    void DrawSettings() override;
+    void DrawSettings(const float& bigPadding, const float& centerX, const float& itemWidth) override;
     void Load(const nlohmann::json& j) override;
     void Save(nlohmann::json& j) const override;
 

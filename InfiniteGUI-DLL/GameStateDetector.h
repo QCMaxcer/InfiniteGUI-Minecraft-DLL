@@ -9,7 +9,6 @@ public:
 
     GameStateDetector() {
         type = Hidden; // 信息项类型
-        multiType = Singleton;    // 信息项是否可以多开
         name = u8"游戏状态检测";
         description = u8"检测游戏当前状态";
         icon = u8"\uE039";
@@ -34,7 +33,7 @@ public:
     void Update() override;
     void Load(const nlohmann::json& j) override;
     void Save(nlohmann::json& j) const override;
-    void DrawSettings() override;
+    void DrawSettings(const float& bigPadding, const float& centerX, const float& itemWidth) override;
 
     //bool IsPaused() const;          // ESC菜单
     //bool IsInventoryOpen() const;   // 背包

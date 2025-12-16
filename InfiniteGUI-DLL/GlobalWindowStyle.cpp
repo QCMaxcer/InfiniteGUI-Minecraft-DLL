@@ -16,9 +16,9 @@ void GlobalWindowStyle::Save(nlohmann::json& j) const
 	SaveStyle(j);
 }
 
-void GlobalWindowStyle::DrawSettings()
+void GlobalWindowStyle::DrawSettings(const float& bigPadding, const float& centerX, const float& itemWidth)
 {
-	DrawStyleSettings();
+	DrawStyleSettings(bigPadding, centerX, itemWidth);
 }
 
 ItemStyle& GlobalWindowStyle::GetGlobeStyle()

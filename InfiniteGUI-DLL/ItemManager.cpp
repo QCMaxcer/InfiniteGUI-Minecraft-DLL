@@ -32,65 +32,38 @@ ItemManager::ItemManager()
 void ItemManager::Init()
 {
     // 注册默认 Singleton
-    AddSingleton(&Menu::Instance());
+    AddItem(&Menu::Instance());
 
-    AddSingleton(&Sprint::Instance());
+    AddItem(&Sprint::Instance());
 
-    AddSingleton(&Motionblur::Instance());
-    AddSingleton(&ClickEffect::Instance());
+    AddItem(&Motionblur::Instance());
+    AddItem(&ClickEffect::Instance());
 
-    AddSingleton(&TimeItem::Instance());
-    AddSingleton(&FpsItem::Instance());
-    AddSingleton(&DanmakuItem::Instance());
-    AddSingleton(&KeystrokesItem::Instance());
-    AddSingleton(&CPSItem::Instance());
+    AddItem(&TimeItem::Instance());
+    AddItem(&FpsItem::Instance());
+    AddItem(&DanmakuItem::Instance());
+    AddItem(&KeystrokesItem::Instance());
+    AddItem(&CPSItem::Instance());
+    AddItem(&BilibiliFansItem::Instance());
+    AddItem(&TextItem::Instance());
+    AddItem(&FileCountItem::Instance());
+    AddItem(&CounterItem::Instance());
 
-    AddSingleton(&GlobalWindowStyle::Instance());
-    AddSingleton(&GameStateDetector::Instance());
-    AddSingleton(&CPSDetector::Instance());
+    AddItem(&GlobalWindowStyle::Instance());
+    AddItem(&GameStateDetector::Instance());
+    AddItem(&CPSDetector::Instance());
 }
 
 // ------------------------------------------------
-void ItemManager::AddSingleton(Item* item)
+void ItemManager::AddItem(Item* item)
 {
-    singletonItems.push_back(item);
-    allItems.push_back(item);
-}
-
-void ItemManager::AddMulti(std::unique_ptr<Item> item)
-{
-    allItems.push_back(item.get());
-    multiItems.push_back(std::move(item));
-}
-
-void ItemManager::RemoveMulti(Item* target)
-{
-    if (!target) return;
-    if (!target->IsMultiInstance()) {
-        return; // 禁止删除 Singleton
-    }
-    // 1. 在 multiItems 中查找 unique_ptr 所拥有的对象
-    for (auto it = multiItems.begin(); it != multiItems.end(); ++it)
-    {
-        if (it->get() == target)
-        {
-            // 2. 从 allItems 中移除
-            allItems.erase(
-                std::remove(allItems.begin(), allItems.end(), target),
-                allItems.end()
-            );
-
-            // 3. 从 multiItems 中删除（自动 delete）
-            multiItems.erase(it);
-            return; // 删除完立刻返回
-        }
-    }
+    Items.push_back(item);
 }
 
 // ------------------------------------------------
 void ItemManager::UpdateAll() const
 {
-    for (auto item : allItems)
+    for (auto item : Items)
     {
         if (!item->isEnabled) continue;
         if (auto upd = dynamic_cast<UpdateModule*>(item))
@@ -110,7 +83,7 @@ void ItemManager::RenderAll() const
     bool isWindowNeedHide = false;
     if (GameStateDetector::Instance().IsNeedHide())
         isWindowNeedHide = true; // 隐藏所有窗口
-    for (auto item : allItems)
+    for (auto item : Items)
     {
         if (!item->isEnabled) continue;
         if (auto ren = dynamic_cast<RenderModule*>(item))
@@ -129,7 +102,7 @@ void ItemManager::RenderAll() const
 // ------------------------------------------------
 void ItemManager::ProcessKeyEvents(bool state, bool isRepeat, WPARAM key) const
 {
-    for (auto item : allItems)
+    for (auto item : Items)
     {
         if (auto kbd = dynamic_cast<KeybindModule*>(item))
         {
@@ -146,13 +119,13 @@ void ItemManager::ProcessKeyEvents(bool state, bool isRepeat, WPARAM key) const
 // ------------------------------------------------
 void ItemManager::Load(const nlohmann::json& j)
 {
-    // ---- 加载单例 ----
-    if (j.contains("SingletonItems"))
+    // ---- 加载Item ----
+    if (j.contains("Items"))
     {
-        for (auto& node : j["SingletonItems"])
+        for (auto& node : j["Items"])
         {
             std::string type = node["type"];
-            for (auto item : singletonItems)
+            for (auto item : Items)
             {
                 if (item->name == type)
                 {
@@ -162,71 +135,27 @@ void ItemManager::Load(const nlohmann::json& j)
             }
         }
     }
-    // ---- 清空多例并重建 ----
-    multiItems.clear();
-    allItems.erase(
-        std::remove_if(allItems.begin(), allItems.end(),
-            [&](Item* it) { return it->IsMultiInstance(); }),
-        allItems.end()
-    );
-
-    if (j.contains("MultiInstanceItems"))
-    {
-        for (auto& node : j["MultiInstanceItems"])
-        {
-            std::unique_ptr<Item> item;
-            std::string type = node["type"];
-
-            if (type == u8"粉丝数显示") item = std::make_unique<BilibiliFansItem>();
-            if (type == u8"文件数量显示") item = std::make_unique<FileCountItem>();
-            if (type == u8"计数器")     item = std::make_unique<CounterItem>();
-            if (type == u8"文本显示")   item = std::make_unique<TextItem>();
-
-            if (!item) continue;
-
-            item->Load(node);
-            AddMulti(std::move(item));
-        }
-    }
 }
 
 // ------------------------------------------------
 void ItemManager::Save(nlohmann::json& j) const
 {
-    j["SingletonItems"] = nlohmann::json::array();
-    j["MultiInstanceItems"] = nlohmann::json::array();
-
-    for (auto item : singletonItems)
+    j["Items"] = nlohmann::json::array();
+    for (auto item : Items)
     {
         nlohmann::json node;
         item->Save(node);
-        j["SingletonItems"].push_back(node);
+        j["Items"].push_back(node);
     }
 
-    for (auto& up : multiItems)
-    {
-        nlohmann::json node;
-        up->Save(node);
-        j["MultiInstanceItems"].push_back(node);
-    }
 }
 
-void ItemManager::Clear(bool resetSingletons)
+void ItemManager::Clear(bool resetSingletons) const
 {
-    // ---- 1. 删除多例 Items ----
-    multiItems.clear(); // unique_ptr 自动释放对象内存
-
-    // ---- 2. 清理 allItems 中剩余的多例条目 ----
-    allItems.erase(
-        std::remove_if(allItems.begin(), allItems.end(),
-            [&](Item* it) { return it->IsMultiInstance(); }),
-        allItems.end()
-    );
-
-    // ---- 3. 重置所有 SingletonItems（可选，根据需求） ----
+    // ---- 重置所有 Items ----
     if (resetSingletons)
     {
-        for (auto* item : singletonItems)
+        for (auto* item : Items)
         {
             item->Reset();   //  要求 Item 提供 Reset() 或默认状态
         }

@@ -26,7 +26,6 @@ public:
 
     Menu() {
         type = Hud; // 信息项类型
-        multiType = Singleton;    // 信息项是否可以多开
         name = u8"菜单";
         description = u8"显示菜单";
         icon = "J";
@@ -61,7 +60,7 @@ public:
         itemStyle.fontSize = 24.0f;
         itemStyle.bgColor = ImVec4(0.0f, 0.0f, 0.0f, 0.15f);
     }
-    void DrawSettings() override;
+    void DrawSettings(const float& bigPadding, const float& centerX, const float& itemWidth) override;
     void Load(const nlohmann::json& j) override;
     void Save(nlohmann::json& j) const override;
     void OnKeyEvent(bool state, bool isRepeat, WPARAM key) override;
@@ -72,7 +71,7 @@ private:
     void ShowSettings(bool* done);
     void OldSettings();
     void DrawItemList() const;
-    void DrawItemEditor(Item* item) const;
+    void DrawItemEditor(Item* item, const float& bigPadding, const float& centerX, const float& itemWidth) const;
     Blur * blur;
     SettingMenu * settingMenu;
     bool initialized = false;

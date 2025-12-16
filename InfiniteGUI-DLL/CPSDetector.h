@@ -109,7 +109,6 @@ class CPSDetector : public Item, public UpdateModule
 public:
     CPSDetector() {
         type = Hidden; // 信息项类型
-        multiType = Singleton;    // 信息项是否可以多开
         name = u8"CPS检测";
         description = u8"检测左右键CPS";
         icon = "!";
@@ -133,7 +132,7 @@ public:
     void Update() override;
     void Load(const nlohmann::json& j) override;
     void Save(nlohmann::json& j) const override;
-    void DrawSettings() override;
+    void DrawSettings(const float& bigPadding, const float& centerX, const float& itemWidth) override;
 
     int GetLeftCPS();
     int GetRightCPS();

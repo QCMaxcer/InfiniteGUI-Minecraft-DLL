@@ -27,7 +27,6 @@ class Sprint : public WindowModule, public UpdateModule, public KeybindModule, p
 public:
     Sprint() {
         type = Util; // 信息项类型
-        multiType = Singleton;    // 信息项是否可以多开
         name = u8"强制疾跑";
         description = u8"强制疾跑";
         icon = "o";
@@ -66,7 +65,7 @@ public:
 
     void Update() override;
     void DrawContent() override;
-    void DrawSettings() override;
+    void DrawSettings(const float& bigPadding, const float& centerX, const float& itemWidth) override;
     void Load(const nlohmann::json& j) override;
     void Save(nlohmann::json& j) const override;
 

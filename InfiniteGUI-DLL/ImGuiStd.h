@@ -177,16 +177,6 @@ namespace ImGuiStd {
     static ImGuiID current_edit_color_element_id = 0;
     static bool EditColor(const char* label, ImVec4& color, ImVec4 refColor, ImGuiColorEditFlags flags = ImGuiColorEditFlags_AlphaPreviewHalf | ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_NoSidePreview | ImGuiColorEditFlags_NoLabel)
     {
-        //ImGuiStyle& style = ImGui::GetStyle();
-        //ImGui::ColorEdit4(label, (float*)&color, ImGuiColorEditFlags_AlphaBar | flags);
-        //if (memcmp(&color, &refColor, sizeof(ImVec4)) != 0)
-        //{
-        //    // Tips: in a real user application, you may want to merge and use an icon font into the main font,
-        //    // so instead of "Save"/"Revert" you'd use icons!
-        //    // Read the FAQ and docs/FONTS.md about using icon fonts. It's really easy and super convenient!
-        //    //ImGui::SameLine(0.0f, style.ItemInnerSpacing.x); if (ImGui::Button(u8"±£´æ")) { refColor = color; }
-        //    ImGui::SameLine(0.0f, style.ItemInnerSpacing.x); if (ImGui::Button(u8"»¹Ô­")) { color = refColor; }
-        //}
         bool changed = false;
         static std::map<const char*, edit_color_element> edit_color_elements;
         if (edit_color_elements.find(label) == edit_color_elements.end())
@@ -196,7 +186,7 @@ namespace ImGuiStd {
             edit_color_elements[label] = element;
         }
         edit_color_element& element = edit_color_elements[label];\
-        ImVec2 target_size = ImVec2(338 * ImGui::GetFontSize() / 20.0f, 366 * ImGui::GetFontSize() / 20.0f);
+        ImVec2 target_size = ImVec2(338 * ImGui::GetFontSize() / 20.0f, 369 * ImGui::GetFontSize() / 20.0f);
         float speed = 10.0f * ImGui::GetIO().DeltaTime;
         std::string text = label + std::string(u8"£º");
 
@@ -245,8 +235,8 @@ namespace ImGuiStd {
             element.id = current_edit_color_element_id++;
             edit_color_elements[label] = element;
         }
-        edit_color_element& element = edit_color_elements[label];\
-            static ImVec2 target_size = ImVec2(0, 366);
+        edit_color_element& element = edit_color_elements[label];
+            static ImVec2 target_size = ImVec2(338 * ImGui::GetFontSize() / 20.0f, 368 * ImGui::GetFontSize() / 20.0f);
         float speed = 10.0f * ImGui::GetIO().DeltaTime;
         std::string text = label + std::string(u8"£º");
 

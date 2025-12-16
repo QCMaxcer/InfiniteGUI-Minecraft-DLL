@@ -5,7 +5,6 @@ class Motionblur : public Item, public RenderModule {
 public:
     Motionblur() {
         type = Visual; // 信息项类型
-        multiType = Singleton;    // 信息项是否可以多开
         name = u8"动态模糊";
         description = u8"采用帧混合技术实现的动态模糊";
         icon = u8"\uE059";
@@ -32,7 +31,7 @@ public:
     void Render() override;
     void Load(const nlohmann::json& j) override;
     void Save(nlohmann::json& j) const override;
-    void DrawSettings() override;
+    void DrawSettings(const float& bigPadding, const float& centerX, const float& itemWidth) override;
 
     void initialize_texture(const int width, const int height);
     void initialize_quad();

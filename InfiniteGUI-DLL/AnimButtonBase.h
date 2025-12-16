@@ -93,7 +93,6 @@ protected:
 
     float m_padding = 8.0f;
 
-
 	bool DrawInvisibleButton(const ButtonAnimTarget& current, const ImDrawFlags& flags = ImGuiButtonFlags_PressedOnClickRelease) const
 	{
 		// 获取当前按钮区域（使用 m_current 来绘制）
@@ -184,6 +183,25 @@ protected:
 	{
 		return pos.x!= lastPos.x || pos.y!= lastPos.y;
 	}
+
+	static ImVec2 CalPostionChangedValue(const ImVec2& pos, const ImVec2& lastPos)
+	{
+		return ImVec2(pos.x - lastPos.x, pos.y - lastPos.y);
+	}
+
+	static void ApllyButtonPositionChange(ButtonAnimTarget& button, const ImVec2& posChange)
+	{
+		button.center.x += posChange.x;
+		button.center.y += posChange.y;
+	}
+
+	static void ApllyTextPositionChange(TextAnimTarget& text, const ImVec2& posChange)
+	{
+		text.center.x += posChange.x;
+		text.center.y += posChange.y;
+	}
+
+	virtual void ApllyCenterPositionChange() = 0;
 
 	static void LerpButton(ButtonAnimTarget& cur, const ButtonAnimTarget& target, float damping, float deltaTime)
 	{

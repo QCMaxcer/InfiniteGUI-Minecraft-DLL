@@ -354,15 +354,13 @@ void DanmakuItem::DrawContent()
 
 }
 
-void DanmakuItem::DrawSettings()
+void DanmakuItem::DrawSettings(const float& bigPadding, const float& centerX, const float& itemWidth)
 {
     //DrawItemSettings();
     ImGuiStd::InputTextStd(u8"弹幕日志文件路径", logPath);
     ImGui::InputInt(u8"最大弹幕数", &maxDanmakuCount);
-    if (ImGui::CollapsingHeader(u8"通用设置"))
-    {
-        DrawWindowSettings();
-    }
+
+    DrawWindowSettings(bigPadding, centerX, itemWidth);
 }
 
 void DanmakuItem::Load(const nlohmann::json& j)

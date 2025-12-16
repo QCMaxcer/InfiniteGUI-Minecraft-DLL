@@ -1,9 +1,12 @@
 ﻿#pragma once
 #include "CategoryBar.h"
-#include "ItemManager.h"
+#include "CounterItem.h"
+#include "FileCountItem.h"
 #include "ModuleButton.h"
 #include "ModuleCard.h"
 #include "ModuleSettings.h"
+#include "ItemManager.h"
+#include "TextItem.h"
 
 class ModulesPanel
 {
@@ -37,13 +40,8 @@ public:
 		}
 		for (auto item : ItemManager::Instance().GetAllItems())
 		{
-			if (item->IsMultiInstance())
-			{
-
-			}
-			else
-				if (item->type != Hidden)
-					m_moduleCard.push_back(new ModuleCard(item));
+			if (item->type != Hidden)
+				m_moduleCard.push_back(new ModuleCard(item));
 		}
 	}
 	void Draw()

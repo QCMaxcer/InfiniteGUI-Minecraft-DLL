@@ -84,7 +84,7 @@ void ClickEffect::Save(nlohmann::json& j) const
 	j["clickCircleSettings.radius"] = clickCircleSettings.radius;
 }
 
-void ClickEffect::DrawSettings()
+void ClickEffect::DrawSettings(const float& bigPadding, const float& centerX, const float& itemWidth)
 {
 	//DrawItemSettings();
 	ImGui::Checkbox(u8"游戏内启用", &enabledInGame);

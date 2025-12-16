@@ -1,44 +1,69 @@
 #include "TextItem.h"
+
+#include "GameStateDetector.h"
 #include "ImGuiStd.h"
 
 void TextItem::Toggle()
 {
 }
 
-void TextItem::DrawContent()
+void TextItem::Render()
 {
-    ImVec4 targetTextColor = ImGui::GetStyleColorVec4(ImGuiCol_Text);
-    //获取io
-    ImGuiIO& io = ImGui::GetIO();
-    //计算速度
-    float speed = 3.0f * io.DeltaTime;
-    color.color = ImLerp(color.color, targetTextColor, speed);
-    ImGuiStd::TextColoredShadow(color.color, (prefix + text + suffix).c_str());
+    if (GameStateDetector::Instance().IsNeedHide()) return;
+    for(auto& text : texts)
+        if(text.GetEnabled()) text.Render();
 }
 
-void TextItem::DrawSettings()
+void TextItem::DrawSettings(const float& bigPadding, const float& centerX, const float& itemWidth)
 {
     //DrawItemSettings();
-    ImGuiStd::InputTextStd(u8"文本内容", text);
-    if (ImGui::CollapsingHeader(u8"通用设置"))
+    for (int i = 0; i < texts.size(); i++)
     {
-        DrawAffixSettings();
-        DrawWindowSettings();
+        ImGui::PushID(i);
+        Text& text = texts[i];
+        if (ImGui::CollapsingHeader(text.GetText().c_str(), ImGuiTreeNodeFlags_DefaultOpen))
+        {
+            text.DrawSettings(bigPadding, centerX, itemWidth);
+            //居中显示
+            ImGui::SetCursorPosX(bigPadding);
+            if (ImGui::Button(u8"删除",ImVec2(centerX * 2 - bigPadding, 0)))
+            {
+                texts.erase(texts.begin() + i);
+            }
+            ImGui::Separator();
+        }
+        ImGui::PopID();
+    }
+    ImGui::SetCursorPosX(bigPadding);
+    if (ImGui::Button("+", ImVec2(centerX * 2 - bigPadding, 0)))
+    {
+        texts.emplace_back();
     }
 }
 
 void TextItem::Load(const nlohmann::json& j)
 {
     LoadItem(j);
-    LoadAffix(j);
-    LoadWindow(j);
-    if (j.contains("text")) text = j["text"];
+    texts.clear();
+    if (!j.contains("texts") || !j["texts"].is_array())
+        return;
+
+    for (const auto& tj : j["texts"])
+    {
+        Text text;
+        text.Load(tj);
+        texts.push_back(std::move(text));
+    }
 }
 
 void TextItem::Save(nlohmann::json& j) const
 {
     SaveItem(j);
-    SaveWindow(j);
-    SaveAffix(j);
-    j["text"] = text;
+    j["texts"] = nlohmann::json::array();
+    for (const auto& text : texts)
+    {
+        nlohmann::json tj;
+        text.Save(tj);
+        j["texts"].push_back(tj);
+    }
 }

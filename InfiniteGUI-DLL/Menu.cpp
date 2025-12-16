@@ -684,7 +684,7 @@ void Menu::OldSettings()
                 ImGuiStd::TextShadow(item->name.c_str());
                 ImGui::EndDisabled();
                 ImGui::PopFont();
-                item->DrawSettings();
+                //item->DrawSettings();
             }
         }
 
@@ -696,22 +696,22 @@ void Menu::OldSettings()
 
     // 添加各种信息项按钮
 
-    if (ImGui::Button(u8"添加 文本")) {
-        ItemManager::Instance().AddMulti(std::make_unique<TextItem>());
-    }
+    //if (ImGui::Button(u8"添加 文本")) {
+    //    ItemManager::Instance().AddMulti(std::make_unique<TextItem>());
+    //}
 
-    if (ImGui::Button(u8"添加 文件数量")) {
-        ItemManager::Instance().AddMulti(std::make_unique<FileCountItem>());
-    }
+    //if (ImGui::Button(u8"添加 文件数量")) {
+    //    ItemManager::Instance().AddMulti(std::make_unique<FileCountItem>());
+    //}
 
-    if (ImGui::Button(u8"添加 粉丝数")) {
-        ItemManager::Instance().AddMulti(std::make_unique<BilibiliFansItem>());
-    }
+    //if (ImGui::Button(u8"添加 粉丝数")) {
+    //    ItemManager::Instance().AddMulti(std::make_unique<BilibiliFansItem>());
+    //}
 
-    if (ImGui::Button(u8"添加 计数器"))
-    {
-        ItemManager::Instance().AddMulti(std::make_unique<CounterItem>());
-    }
+    //if (ImGui::Button(u8"添加 计数器"))
+    //{
+    //    ItemManager::Instance().AddMulti(std::make_unique<CounterItem>());
+    //}
 
     ImGui::Separator();
     DrawItemList();
@@ -829,16 +829,13 @@ void Menu::DrawItemList() const
         ImGui::SameLine();
         ImGui::PushID(i);
 
-        if (item->IsMultiInstance())
+        if (ImGui::Button(u8"删除"))
         {
-            if (ImGui::Button(u8"删除"))
-            {
-                ItemManager::Instance().RemoveMulti(item);
-                ImGui::PopID();
-                break;
-            }
-            ImGui::SameLine();
+            //ItemManager::Instance().RemoveMulti(item);
+            ImGui::PopID();
+            break;
         }
+        ImGui::SameLine();
         if (ImGui::Button(u8"设置"))
         {
             ImGui::OpenPopup("ItemEditor");
@@ -846,7 +843,7 @@ void Menu::DrawItemList() const
 
         if (ImGui::BeginPopup("ItemEditor"))
         {
-            DrawItemEditor(item);
+            //DrawItemEditor(item);
             ImGui::EndPopup();
         }
 
@@ -854,12 +851,12 @@ void Menu::DrawItemList() const
     }
 }
 
-void Menu::DrawItemEditor(Item* item) const
+void Menu::DrawItemEditor(Item* item, const float& bigPadding, const float& centerX, const float& itemWidth) const
 {
     ImGui::Text(u8"编辑项：%s", item->name.c_str());
 
     // 根据不同类型显示不同配置项
-    item->DrawSettings();
+    item->DrawSettings(bigPadding, centerX, itemWidth);
 }
 
 void Menu::Toggle()
@@ -886,13 +883,17 @@ void Menu::Toggle()
     }
 }
 
-void Menu::DrawSettings()
+void Menu::DrawSettings(const float& bigPadding, const float& centerX, const float& itemWidth)
 {
-    //DrawItemSettings();
-    DrawKeybindSettings();
+    float bigItemWidth = centerX * 2.0f - bigPadding * 4.0f;
+
+    ImGui::SetCursorPosX(bigPadding);
     ImGui::Checkbox(u8"背景模糊", &blur->menu_blur);
+    ImGui::SetCursorPosX(bigPadding);
+    ImGui::PushItemWidth(bigItemWidth);
     ImGui::SliderInt(u8"模糊强度", &blur->blurriness_value, 0, 10);
-    DrawStyleSettings();
+    DrawKeybindSettings(bigPadding, centerX, itemWidth);
+    DrawStyleSettings(bigPadding, centerX, itemWidth);
 }
 
 void Menu::Load(const nlohmann::json& j)

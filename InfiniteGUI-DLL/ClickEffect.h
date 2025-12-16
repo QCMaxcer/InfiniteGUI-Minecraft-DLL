@@ -11,7 +11,6 @@ class ClickEffect : public Item, public RenderModule, public UpdateModule
 public:
     ClickEffect() {
         type = Visual; // 信息项类型
-        multiType = Singleton;    // 信息项是否可以多开
         name = u8"点击特效";
         description = u8"点点鼠标，看看会发生什么？";
 		icon = "&";
@@ -41,7 +40,7 @@ public:
     void Render() override;
     void Load(const nlohmann::json& j) override;
     void Save(nlohmann::json& j) const override;
-    void DrawSettings() override;
+    void DrawSettings(const float& bigPadding, const float& centerX, const float& itemWidth) override;
 private:
     void ClearClickEffects()
 	{

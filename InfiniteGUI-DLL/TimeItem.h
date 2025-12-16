@@ -17,7 +17,6 @@ class TimeItem : public Item, public AffixModule , public UpdateModule, public W
 public:
     TimeItem() {
         type = Hud; // 信息项类型
-        multiType = Singleton;    // 信息项是否可以多开
         name = u8"时间显示";
         description = u8"显示当前时间";
         icon = "a";
@@ -41,7 +40,7 @@ public:
     }
     void Update() override;
     void DrawContent() override;
-    void DrawSettings() override;
+    void DrawSettings(const float& bigPadding, const float& centerX, const float& itemWidth) override;
     void Load(const nlohmann::json& j) override;
     void Save(nlohmann::json& j) const override;
 

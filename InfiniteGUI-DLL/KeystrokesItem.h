@@ -72,7 +72,6 @@ class KeystrokesItem : public Item, public WindowModule, public UpdateModule
 public:
     KeystrokesItem() {
         type = Hud; // 信息项类型
-        multiType = Singleton;    // 信息项是否可以多开
         name = u8"按键显示";
         description = u8"显示按键状态";
         icon = u8"\uE05D";
@@ -111,7 +110,7 @@ public:
     }
     void Update() override;
     void DrawContent() override;
-    void DrawSettings() override;
+    void DrawSettings(const float& bigPadding, const float& centerX, const float& itemWidth) override;
     void Load(const nlohmann::json& j) override;
     void Save(nlohmann::json& j) const override;
 

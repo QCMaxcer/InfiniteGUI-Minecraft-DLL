@@ -106,19 +106,16 @@ void Sprint::DrawContent()
     ImGuiStd::TextColoredShadow(color.color, (prefix + text + suffix).c_str());
 }
 
-void Sprint::DrawSettings()
+void Sprint::DrawSettings(const float& bigPadding, const float& centerX, const float& itemWidth)
 {
     //DrawItemSettings();
     ImGui::Checkbox(u8"激活", &isActivated);
     ImGui::Checkbox(u8"显示窗口", &isWindowShow);
 
-    DrawKeybindSettings();
-    if (ImGui::CollapsingHeader(u8"通用设置"))
-    {
-        DrawAffixSettings();
-        DrawSoundSettings();
-        DrawWindowSettings();
-    }
+    DrawKeybindSettings(bigPadding, centerX, itemWidth);
+    DrawAffixSettings(bigPadding, centerX, itemWidth);
+    DrawSoundSettings(bigPadding, centerX, itemWidth);
+    DrawWindowSettings(bigPadding, centerX, itemWidth);
 }
 
 void Sprint::Load(const nlohmann::json& j)

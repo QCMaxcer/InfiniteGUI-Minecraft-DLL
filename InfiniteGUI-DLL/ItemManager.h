@@ -15,23 +15,20 @@ public:
         return instance;
     }
 
-    void AddSingleton(Item* item);
-    void AddMulti(std::unique_ptr<Item> item);
-    void RemoveMulti(Item* target);
+    void AddItem(Item* item);
     void UpdateAll() const;
 
     void RenderAll() const;
     void ProcessKeyEvents(bool state, bool isRepeat, WPARAM key) const;
 
 
-    void Clear(bool resetSingletons);
+    void Clear(bool resetSingletons) const;
     void Load(const nlohmann::json& j);
     void Save(nlohmann::json& j) const;
 
-    const std::vector<Item*>& GetAllItems() const { return allItems; }
+    const std::vector<Item*>& GetAllItems() const { return Items; }
 
 private:
-    std::vector<Item*> allItems;                      // 全部 item（指针，不析构）
-    std::vector<Item*> singletonItems;                // 单例指针，不析构
-    std::vector<std::unique_ptr<Item>> multiItems;    // 多例，由 manager 管理
+    std::vector<Item*> Items;                      // 全部 item（指针，不析构）
+
 };

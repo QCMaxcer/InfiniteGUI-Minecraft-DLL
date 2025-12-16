@@ -221,6 +221,7 @@
     <ClInclude Include="SoundModule.h" />
     <ClInclude Include="Sprint.h" />
     <ClInclude Include="StringConverter.h" />
+    <ClInclude Include="Text.h" />
     <ClInclude Include="TextItem.h" />
     <ClInclude Include="TimeItem.h" />
     <ClInclude Include="ChangeLog.h" />
@@ -268,6 +269,7 @@
     <ClCompile Include="opengl_hook.cpp" />
     <ClCompile Include="Sprint.cpp" />
     <ClCompile Include="StringConverter.cpp" />
+    <ClCompile Include="Text.cpp" />
     <ClCompile Include="TextItem.cpp" />
     <ClCompile Include="TimeItem.cpp" />
     <ClCompile Include="ChangeLog.cpp" />

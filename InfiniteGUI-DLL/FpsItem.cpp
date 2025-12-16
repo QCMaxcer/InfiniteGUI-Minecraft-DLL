@@ -24,15 +24,12 @@ void FpsItem::DrawContent()
 	ImGuiStd::TextColoredShadow(color.color, (prefix + std::to_string(FPS) + suffix).c_str());
 }
 
-void FpsItem::DrawSettings()
+void FpsItem::DrawSettings(const float& bigPadding, const float& centerX, const float& itemWidth)
 {
 	//DrawItemSettings();
 	ImGui::Text(u8"FPS 无额外设置");
-	if (ImGui::CollapsingHeader(u8"通用设置"))
-	{
-		DrawAffixSettings();
-		DrawWindowSettings();
-	}
+	DrawAffixSettings(bigPadding, centerX, itemWidth);
+	DrawWindowSettings(bigPadding, centerX, itemWidth);
 }
 
 void FpsItem::Load(const nlohmann::json& j)

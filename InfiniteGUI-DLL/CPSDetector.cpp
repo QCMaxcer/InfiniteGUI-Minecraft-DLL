@@ -43,7 +43,7 @@ int CPSDetector::GetRightCPS()
 }
 
 
-void CPSDetector::DrawSettings()
+void CPSDetector::DrawSettings(const float& bigPadding, const float& centerX, const float& itemWidth)
 {
 }
 
