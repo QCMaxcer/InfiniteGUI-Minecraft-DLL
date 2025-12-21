@@ -40,6 +40,10 @@ public:
 	{
 		if (*isEnabled) AudioManager::Instance().playSound("menu\\exit.wav", *volume);
 	}
+	static void PlayIntroSound()
+	{
+		AudioManager::Instance().playSound("intro.wav", 0.3f);
+	}
 private:
 	bool* isEnabled;
 	float* volume;

@@ -219,5 +219,6 @@ bool ConfigManager::LoadProfile()
     std::string hotkeyStr = keys[key];
     std::string notify = u8"无限Gui启动成功！\n按\"" + hotkeyStr + u8"\"键打开菜单。";
     NotificationItem::Instance().AddNotification(NotificationType_Info, notify);
+    ClickSound::PlayIntroSound();
     return true;
 }

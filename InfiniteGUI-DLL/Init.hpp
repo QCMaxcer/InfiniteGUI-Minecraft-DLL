@@ -6,6 +6,7 @@
 #include <atomic>
 
 #include "App.h"
+#include "ClickSound.h"
 #include "HttpUpdateWorker.h"
 #include "ItemManager.h"
 #include "GuiFrameLimiter.h"
@@ -15,7 +16,7 @@ static std::atomic_bool g_running = ATOMIC_VAR_INIT(true);
 // 线程函数：更新所有 item 状态
 void UpdateThread() {
 	while (g_running.load()) {
-		ItemManager::Instance().UpdateAll();  // 调用UpdateAll()来更新所有item
+		if(opengl_hook::gui.isInit) ItemManager::Instance().UpdateAll();  // 调用UpdateAll()来更新所有item
 		std::this_thread::sleep_for(std::chrono::milliseconds(1));  // 休眠1ms，可以根据实际需求调整
 	}
 }
@@ -65,6 +66,7 @@ DWORD WINAPI InitApp(LPVOID)
 	ConfigManager::Instance().LoadProfile();
 	//初始化音频管理器
 	AudioManager::Instance().Init();
+	ClickSound::PlayIntroSound();
 	HttpUpdateWorker::Instance().Start();
 	StartThreads();
 
@@ -79,6 +81,8 @@ DWORD WINAPI InitApp(LPVOID)
 	while (!opengl_hook::gui.done)
 	{
 		std::this_thread::sleep_for(std::chrono::milliseconds(100));
+		if (opengl_hook::handle_window != WindowFromDC(opengl_hook::handle_device_ctx))
+			opengl_hook::lwjgl2FullscreenHandler();
 	}
 	std::this_thread::sleep_for(std::chrono::milliseconds(500));
 	Uninit();

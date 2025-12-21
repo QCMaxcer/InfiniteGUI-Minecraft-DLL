@@ -11,9 +11,11 @@ struct screen
 
 namespace opengl_hook
 {
+	void lwjgl2FullscreenHandler();
 	void init();
 	void remove_hook();
 	bool clean();
+	inline bool rendering = false;
 	inline HDC handle_device_ctx;
 	inline HGLRC o_gl_ctx;//mc原来的gl上下文
 	inline HGLRC custom_gl_ctx;//我们自己创建的gl上下文

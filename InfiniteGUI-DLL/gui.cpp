@@ -66,6 +66,11 @@ void Gui::init()
 }
 void Gui::clean()
 {
+	if(!isInit) return;
+	while (opengl_hook::rendering)
+	{
+
+	}
 	g_Cache.Clear();
 	if (imGuiContext)ImGui::GetIO().Fonts->Clear();
 	if ((ImGui::GetCurrentContext() ? (void*)ImGui::GetIO().BackendRendererUserData : nullptr))ImGui_ImplOpenGL3_Shutdown();
